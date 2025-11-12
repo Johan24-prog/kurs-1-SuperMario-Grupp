@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SuperMarioH3.MoveableObjects;
-using System.Collections.Generic;
 
 namespace SuperMarioH3
 {
@@ -35,7 +36,7 @@ namespace SuperMarioH3
 
         // Movement constants (example values)
         private const float MoveSpeed = 150f;
-        private const float jumpStrength = -300f;
+        private const float jumpStrength = -400f;
         private const float Gravity = 900f;
 
         // Ground
@@ -46,7 +47,7 @@ namespace SuperMarioH3
         private KeyboardState currentKey;
         private KeyboardState previousKey;
 
-        
+
         protected override void Initialize()
         {
             // Initialize player position and ground
@@ -99,6 +100,14 @@ namespace SuperMarioH3
 
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+            //TODO: Flytta all kod som hanterar spelarns uppdatering till dennes klass
+
+            float walkSpeed = 180f;
+            float runSpeed = 250f;
+            float accel = 1500f;
+            float decel = 3000f;
+            float turnDecel = 5000f;
+
             // Horizontal movement
             float moveDirection = 0f;
             if (currentKey.IsKeyDown(Keys.Left) || currentKey.IsKeyDown(Keys.A))
@@ -106,8 +115,45 @@ namespace SuperMarioH3
             if (currentKey.IsKeyDown(Keys.Right) || currentKey.IsKeyDown(Keys.D))
                 moveDirection += 1f;
 
+            float maxSpeed = walkSpeed;
+            if (currentKey.IsKeyDown(Keys.B) || currentKey.IsKeyDown(Keys.LeftShift))
+                maxSpeed = runSpeed;
+
+            if (moveDirection != 0)
+            {
+                // if player changes direction, faster decel. 
+                if (Math.Sign(playerVelocity.X) != Math.Sign(moveDirection) && playerVelocity.X != 0)
+                {
+                    // Decelerate quickly
+                    playerVelocity.X += moveDirection * turnDecel * dt;
+                }
+                else
+                {
+                    // Normal acceleration
+                    playerVelocity.X += moveDirection * accel * dt;
+                }
+
+                // Clamp to max speed
+                if (playerVelocity.X > maxSpeed) playerVelocity.X = maxSpeed;
+                if (playerVelocity.X < -maxSpeed) playerVelocity.X = -maxSpeed;
+            }
+            else
+            {
+                // No input, normal deccel
+                if (playerVelocity.X > 0)
+                {
+                    playerVelocity.X -= decel * dt;
+                    if (playerVelocity.X < 0) playerVelocity.X = 0;
+                }
+                else if (playerVelocity.X < 0)
+                {
+                    playerVelocity.X += decel * dt;
+                    if (playerVelocity.X > 0) playerVelocity.X = 0;
+                }
+            }
+
             // Move player
-            playerVelocity.X = moveDirection * MoveSpeed;
+            //playerVelocity.X = moveDirection * MoveSpeed;
 
             // Jumping: check if on ground and space was just pressed
             bool isOnGround = playerPosition.Y + (playerTexture?.Height ?? 16) >= groundRect.Y;
