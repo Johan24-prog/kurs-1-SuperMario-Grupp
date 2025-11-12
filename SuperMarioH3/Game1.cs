@@ -180,4 +180,7 @@ namespace SuperMarioH3
             base.Draw(gameTime);
         }
     }
-}
+} // TODO: Make the game full screen with a resolution of 1920x1080 and adjust the MoveLimiter and ground accordingly.
+  // TODO: Add Terrain and Platforms for the player to jump on.
+  // TODO: Implement animations for the player and coins.
+  // TODO: Make the Game1 class partial and split code into multiple files for better organization.
