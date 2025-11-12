@@ -11,6 +11,7 @@ namespace SuperMarioH3
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private Move MoveLimiter;
 
         public Game1()
         {
@@ -53,6 +54,10 @@ namespace SuperMarioH3
 
             // Ground top at y = 400, height set to cover bottom area
             groundRect = new Rectangle(0, 400, 800, 200);
+
+            // Initialize MoveLimiter
+            MoveLimiter = new Move(
+                _graphics.PreferredBackBufferWidth);
 
             // Initialize previousKey to current keyboard state to avoid false "just pressed" detections on first frame
             previousKey = Keyboard.GetState();
@@ -111,6 +116,9 @@ namespace SuperMarioH3
 
             // Update position
             playerPosition += playerVelocity * dt;
+
+            // Keep player within screen bounds
+            MoveLimiter.Clamp(ref playerPosition, new Vector2(playerTexture.Width, playerTexture.Height));
 
             // Simple collision with ground
             int playerWidth = playerTexture?.Width ?? 16;
