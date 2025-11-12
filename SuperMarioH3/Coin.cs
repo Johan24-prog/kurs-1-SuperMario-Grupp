@@ -30,7 +30,8 @@ namespace SuperMarioH3
             if (!Collected && bounds.Intersects(playerRect))
             {
                 Collected = true;
-                // add score/sound logic here
+                // TODO: Add score/sound logic here
+                // Extra TODO: Consider adding a collected animation
             }
         }
 

@@ -8,5 +8,7 @@ namespace SuperMarioH3.Spelobject__Bas_
 {
     internal class Hitbox
     {
+        //TODO: Implement Hitbox class
+        // Ex. Define dimensions, collision detection methods, etc.
     }
 }

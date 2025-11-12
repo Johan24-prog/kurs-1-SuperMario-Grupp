@@ -8,5 +8,7 @@ namespace SuperMarioH3
 {
     internal class PowerUp
     {
+        // TODO: Implement PowerUp class
+        // Ex. Mushroom for growth, Fire Flower for fireballs, etc.
     }
 }
