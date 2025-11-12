@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SuperMarioH3.MoveableObjects;
+using SuperMarioH3.NonMoveableObjects;
+using System.Collections.Generic;
 
 namespace SuperMarioH3
 {
@@ -21,6 +23,10 @@ namespace SuperMarioH3
             _graphics.PreferredBackBufferHeight = 600;
         }
 
+        // Coins
+        private List<Coin> coins;
+        private Texture2D coinTexture;
+
         // Player properties
         private Texture2D playerTexture;
         private Vector2 playerPosition;
@@ -33,6 +39,7 @@ namespace SuperMarioH3
 
         // Ground
         private Rectangle groundRect;
+        private Texture2D groundTexture; // reuse instead of allocating every Draw
 
         // Input state
         private KeyboardState currentKey;
@@ -40,12 +47,15 @@ namespace SuperMarioH3
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-            // Example: Initialize player position and ground
+            // Initialize player position and ground
             playerPosition = new Vector2(100, 400);
             playerVelocity = Vector2.Zero;
 
-            groundRect = new Rectangle(0, 400, 800, 800); // Ex. Ground at y=400
+            // Ground top at y = 400, height set to cover bottom area
+            groundRect = new Rectangle(0, 400, 800, 200);
+
+            // Initialize previousKey to current keyboard state to avoid false "just pressed" detections on first frame
+            previousKey = Keyboard.GetState();
 
             base.Initialize();
         }
@@ -54,14 +64,20 @@ namespace SuperMarioH3
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
-
+            // Load textures
             playerTexture = Content.Load<Texture2D>("MarioOneLife");
-            // Example:
-            // playerTexture = new Texture2D(GraphicsDevice, 16, 16); // Placeholder for player texture
-            // Color[] data = new Color[16 * 16];
-            // for (int i = 0; i < data.Length; ++i) data[i] = Color.Red; // Fill with red color (Can use picture instead)
-            // playerTexture.SetData(data);
+            coinTexture = Content.Load<Texture2D>("Coin");
+
+            // Create a single 1x1 ground texture and reuse it (avoid allocating each Draw)
+            groundTexture = new Texture2D(GraphicsDevice, 1, 1);
+            groundTexture.SetData(new[] { Color.ForestGreen });
+
+            coins = new List<Coin>
+            {
+                new Coin(coinTexture, new Vector2(200, 350)),
+                new Coin(coinTexture, new Vector2(300, 350)),
+                new Coin(coinTexture, new Vector2(400, 350))
+            };
         }
 
         protected override void Update(GameTime gameTime)
@@ -69,10 +85,7 @@ namespace SuperMarioH3
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
             currentKey = Keyboard.GetState();
-            if (currentKey.IsKeyDown(Keys.Escape))
-                Exit();
 
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -86,10 +99,8 @@ namespace SuperMarioH3
             // Move player
             playerVelocity.X = moveDirection * MoveSpeed;
 
-            // Jumping
-            // Check if on ground
-            bool isOnGround = playerPosition.Y + playerTexture.Height >= groundRect.Y;
-            // Allow jump if on ground and space is pressed
+            // Jumping: check if on ground and space was just pressed
+            bool isOnGround = playerPosition.Y + (playerTexture?.Height ?? 16) >= groundRect.Y;
             if (isOnGround && currentKey.IsKeyDown(Keys.Space) && !previousKey.IsKeyDown(Keys.Space))
             {
                 playerVelocity.Y = jumpStrength;
@@ -102,38 +113,52 @@ namespace SuperMarioH3
             playerPosition += playerVelocity * dt;
 
             // Simple collision with ground
-            Rectangle playerRect = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 16, 16);
+            int playerWidth = playerTexture?.Width ?? 16;
+            int playerHeight = playerTexture?.Height ?? 16;
+            Rectangle playerRect = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, playerWidth, playerHeight);
+
             if (playerRect.Bottom >= groundRect.Top)
             {
                 // Snap to ground
-                playerPosition.Y = groundRect.Top - 16;
+                playerPosition.Y = groundRect.Top - playerHeight;
                 playerVelocity.Y = 0;
+                playerRect.Y = (int)playerPosition.Y;
             }
 
-            
+            // Update coins in Update (not Draw) so game logic is separated from rendering
+            foreach (var coin in coins)
+            {
+                coin.Update(playerRect);
+            }
+
             previousKey = currentKey;
             base.Update(gameTime);
         }
+
         private bool IsOnGround()
         {
-            return playerPosition.Y + playerTexture.Height >= groundRect.Y;
+            return playerPosition.Y + (playerTexture?.Height ?? 16) >= groundRect.Y;
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
-
             _spriteBatch.Begin();
 
-            // Draw ground
-            Texture2D groundTexture = new Texture2D(GraphicsDevice, 1, 1);
-            groundTexture.SetData(new[] { Color.ForestGreen });
+            // Draw ground using the single reused texture
             _spriteBatch.Draw(groundTexture, groundRect, Color.White);
 
             // Draw player
             _spriteBatch.Draw(playerTexture, playerPosition, Color.White);
+
+            // Draw coins (call their Draw method)
+            foreach (var coin in coins)
+            {
+                if (!coin.Collected)
+                    coin.Draw(_spriteBatch);
+            }
+
             _spriteBatch.End();
 
             base.Draw(gameTime);
