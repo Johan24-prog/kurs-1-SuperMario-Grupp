@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿/*using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 
 namespace SuperMarioH3.MoveableObjects
 {
-    public class Player
+    public class Example
     {
+        
         public Vector2 Position;
         public Vector2 Velocity;
         public Rectangle Bounds => new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
@@ -32,7 +33,7 @@ namespace SuperMarioH3.MoveableObjects
         AnimatedSprite anim;
 
         bool onGround = false;
-        public Player(Texture2D sprite, TileMap map, Vector2 startPosition)
+        public Example(Texture2D sprite, TileMap map, Vector2 startPosition)
         {
             this.sprite = sprite;
             this.map = map;
@@ -177,4 +178,5 @@ namespace SuperMarioH3.MoveableObjects
 }
 
 // Exaple usage:    
-
+*/
+        
