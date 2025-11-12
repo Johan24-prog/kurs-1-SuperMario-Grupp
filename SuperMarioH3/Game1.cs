@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SuperMarioH3.MoveableObjects;
 
 namespace SuperMarioH3
 {
@@ -54,10 +55,13 @@ namespace SuperMarioH3
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            playerTexture = new Texture2D(GraphicsDevice, 16, 16); // Placeholder for player texture
-            Color[] data = new Color[16 * 16];
-            for (int i = 0; i < data.Length; ++i) data[i] = Color.Red; // Fill with red color (Can use picture instead)
-            playerTexture.SetData(data);
+
+            playerTexture = Content.Load<Texture2D>("MarioOneLife");
+            // Example:
+            // playerTexture = new Texture2D(GraphicsDevice, 16, 16); // Placeholder for player texture
+            // Color[] data = new Color[16 * 16];
+            // for (int i = 0; i < data.Length; ++i) data[i] = Color.Red; // Fill with red color (Can use picture instead)
+            // playerTexture.SetData(data);
         }
 
         protected override void Update(GameTime gameTime)
