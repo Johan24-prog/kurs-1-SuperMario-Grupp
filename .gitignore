@@ -11,6 +11,13 @@
 *.sln.docstates
 *.env
 
+## MonoGame pipeline cache
+*.mgcb.cache
+
+## MonoGame generated intermediate files
+Content/bin/
+Content/obj/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
