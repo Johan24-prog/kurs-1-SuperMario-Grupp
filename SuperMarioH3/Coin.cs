@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SuperMarioH3.NonMoveableObjects
+namespace SuperMarioH3
 {
     public class Coin
     {

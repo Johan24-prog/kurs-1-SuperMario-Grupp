@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperMarioH3.NonMoveableObjects
+namespace SuperMarioH3
 {
     internal class PowerUp
     {
