@@ -1,16 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace SuperMarioH3.Spelobject__Bas_
+namespace SuperMarioH3
 {
     public class Hitbox
     {
-        //TODO: Implement Hitbox class
-        // Ex. Define dimensions, collision detection methods, etc.
-        
+        public Rectangle Bounds { get; private set; }
+
+        private Color _debugColor = Color.Red;
+        private Texture2D _debugTexture;
+
+        public Hitbox(GraphicsDevice graphicsDevice, int x, int y, int width, int height)
+        {
+            Bounds = new Rectangle(x, y, width, height);
+
+            // Create a 1x1 texture for debugging visuals
+            _debugTexture = new Texture2D(graphicsDevice, 1, 1);
+            _debugTexture.SetData(new[] { Color.White });
+        }
+
+        public void Update(Vector2 position)
+        {
+            Bounds = new Rectangle((int)position.X, (int)position.Y, Bounds.Width, Bounds.Height);
+        }
+
+        public bool Intersects(Hitbox other)
+        {
+            return Bounds.Intersects(other.Bounds);
+        }
+
+        public void Draw(SpriteBatch spriteBatch, float alpha = 0.3f)
+        {
+            spriteBatch.Draw(_debugTexture, Bounds, _debugColor * alpha);
+        }
     }
 }

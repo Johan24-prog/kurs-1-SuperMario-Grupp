@@ -10,32 +10,30 @@ namespace SuperMarioH3
         public bool Collected = false;
 
         private Texture2D texture;
-        private Rectangle bounds;
+        
 
         // Hitbox property
-        private Rectangle hitbox;
-        public Rectangle Hitbox => hitbox;
+        public Hitbox Hitbox { get; private set; }
 
         // Width and Height properties
         public int Width => texture.Width;
         public int Height => texture.Height;
 
-        public Coin(Texture2D texture, Vector2 position)
+        public Coin(Texture2D texture, Vector2 position, GraphicsDevice graphicsDevice)
         {
             this.texture = texture;
             Position = position;
             Collected = false;
-            bounds = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+            Hitbox = new Hitbox(graphicsDevice, (int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
 
-        public void Update(Rectangle playerRect)
+        public void Update(Hitbox playerHitbox)
         {
-            // Keep bounds in sync with Position in case Position ever changes
-            bounds = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
-            // Update hitbox
-            hitbox = new Rectangle((int)Position.X, (int)Position.Y, texture.Width, texture.Height); 
+            // Update hitbox position
+            Hitbox.Update(Position);
 
-            if (!Collected && bounds.Intersects(playerRect))
+            // Check for collision with player
+            if (!Collected && Hitbox.Intersects(playerHitbox))
             {
                 Collected = true;
                 // TODO: Add score/sound logic here

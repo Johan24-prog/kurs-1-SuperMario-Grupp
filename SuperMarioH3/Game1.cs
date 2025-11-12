@@ -31,6 +31,7 @@ namespace SuperMarioH3
         private Texture2D playerTexture;
         private Vector2 playerPosition;
         private Vector2 playerVelocity;
+        private Hitbox playerHitbox;
 
         // Movement constants (example values)
         private const float MoveSpeed = 150f;
@@ -45,14 +46,7 @@ namespace SuperMarioH3
         private KeyboardState currentKey;
         private KeyboardState previousKey;
 
-        // Hitbox property for the player
-        public Rectangle Hitbox
-        {
-            get
-            {
-                return new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 16, 16);
-            }
-        }
+        
         protected override void Initialize()
         {
             // Initialize player position and ground
@@ -86,10 +80,14 @@ namespace SuperMarioH3
 
             coins = new List<Coin>
             {
-                new Coin(coinTexture, new Vector2(200, 350)),
-                new Coin(coinTexture, new Vector2(300, 350)),
-                new Coin(coinTexture, new Vector2(400, 350))
+                new Coin(coinTexture, new Vector2(200, 350), GraphicsDevice),
+                new Coin(coinTexture, new Vector2(300, 350), GraphicsDevice),
+                new Coin(coinTexture, new Vector2(400, 350), GraphicsDevice)
             };
+
+            // Initialize player's hitbox
+            playerHitbox = new Hitbox(GraphicsDevice, (int)playerPosition.X, (int)playerPosition.Y, playerTexture.Width, playerTexture.Height);
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -140,14 +138,10 @@ namespace SuperMarioH3
                 playerRect.Y = (int)playerPosition.Y;
             }
 
+            // Update player's hitbox to current position
+            playerHitbox.Update(playerPosition);
+
             // Update coins in Update (not Draw) so game logic is separated from rendering
-            foreach (var coin in coins)
-            {
-                coin.Update(playerRect);
-            }
-            // Hitbox for player
-            Rectangle playerHitbox = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 16, 16); // Example size
-            // Update coins with hitbox
             foreach (var coin in coins)
             {
                 coin.Update(playerHitbox);
