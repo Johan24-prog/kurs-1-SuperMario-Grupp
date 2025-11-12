@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SuperMarioH3.MoveableObjects;
-using SuperMarioH3.NonMoveableObjects;
 using System.Collections.Generic;
 
 namespace SuperMarioH3
