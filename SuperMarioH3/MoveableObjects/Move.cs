@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace SuperMarioH3.MoveableObjects
 {
-    internal class Move
+    public class Move
     {
         // The width of the game screen
         private readonly int ScreenWidth;       
 
-        internal Move(int screenWidth)
+        public Move(int screenWidth)
         {
             ScreenWidth = screenWidth;
         }
