@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SuperMarioH3.Spelobject__Bas_;
 
 namespace SuperMarioH3
 {
@@ -11,6 +12,11 @@ namespace SuperMarioH3
         private Texture2D texture;
         private Rectangle bounds;
 
+        // Hitbox property
+        private Rectangle hitbox;
+        public Rectangle Hitbox => hitbox;
+
+        // Width and Height properties
         public int Width => texture.Width;
         public int Height => texture.Height;
 
@@ -24,8 +30,10 @@ namespace SuperMarioH3
 
         public void Update(Rectangle playerRect)
         {
-            // keep bounds in sync with Position in case Position ever changes
+            // Keep bounds in sync with Position in case Position ever changes
             bounds = new Rectangle((int)Position.X, (int)Position.Y, Width, Height);
+            // Update hitbox
+            hitbox = new Rectangle((int)Position.X, (int)Position.Y, texture.Width, texture.Height); 
 
             if (!Collected && bounds.Intersects(playerRect))
             {
@@ -33,6 +41,8 @@ namespace SuperMarioH3
                 // TODO: Add score/sound logic here
                 // Extra TODO: Consider adding a collected animation
             }
+
+
         }
 
         public void Draw(SpriteBatch spriteBatch)

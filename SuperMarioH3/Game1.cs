@@ -45,6 +45,14 @@ namespace SuperMarioH3
         private KeyboardState currentKey;
         private KeyboardState previousKey;
 
+        // Hitbox property for the player
+        public Rectangle Hitbox
+        {
+            get
+            {
+                return new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 16, 16);
+            }
+        }
         protected override void Initialize()
         {
             // Initialize player position and ground
@@ -54,7 +62,7 @@ namespace SuperMarioH3
             // Ground top at y = 400, height set to cover bottom area
             groundRect = new Rectangle(0, 400, 800, 200);
 
-            // Initialize MoveLimiter
+            // Initialize MoveLimiters
             MoveLimiter = new Move(
                 _graphics.PreferredBackBufferWidth);
 
@@ -136,6 +144,13 @@ namespace SuperMarioH3
             foreach (var coin in coins)
             {
                 coin.Update(playerRect);
+            }
+            // Hitbox for player
+            Rectangle playerHitbox = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, 16, 16); // Example size
+            // Update coins with hitbox
+            foreach (var coin in coins)
+            {
+                coin.Update(playerHitbox);
             }
 
             previousKey = currentKey;
