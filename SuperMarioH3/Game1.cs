@@ -49,6 +49,9 @@ namespace SuperMarioH3
         private KeyboardState currentKey;
         private KeyboardState previousKey;
 
+        // Plattformar
+        private List<Platform> platforms;
+        private Texture2D platformTexture;
 
         protected override void Initialize()
         {
@@ -211,7 +214,7 @@ namespace SuperMarioH3
             _spriteBatch.Begin();
 
             // Draw ground using the single reused texture
-            _spriteBatch.Draw(groundTexture, groundRect, Color.White);
+            _spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 
             // Draw player
             _spriteBatch.Draw(playerTexture, playerPosition, Color.White);
