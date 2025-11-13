@@ -37,7 +37,33 @@ namespace SuperMarioH3
             _graphics.ApplyChanges();
         }
 
-        // Methods
+        // Coins
+        private List<Coin> coins;
+        private Texture2D coinTexture;
+
+        // Player properties
+        private Texture2D playerTexture;
+        private Vector2 playerPosition;
+        private Vector2 playerVelocity;
+        private Hitbox playerHitbox;
+
+        // Movement constants (example values)
+        private const float MoveSpeed = 150f;
+        private const float jumpStrength = -400f;
+        private const float Gravity = 900f;
+
+        // Ground
+        private Rectangle groundRect;
+        private Texture2D groundTexture; // reuse instead of allocating every Draw
+
+        // Input state
+        private KeyboardState currentKey;
+        private KeyboardState previousKey;
+
+        // Plattformar
+        private List<Platform> platforms;
+        private Texture2D platformTexture;
+
         protected override void Initialize()
         {
             groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
@@ -98,8 +124,8 @@ namespace SuperMarioH3
         {
             GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
 
-            // Draw everything using the camera transform (one Begin / one End)
-            _spriteBatch.Begin(transformMatrix: camera.Transform);
+            // Draw ground using the single reused texture
+            _spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 
             _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
             player.Draw(_spriteBatch);
