@@ -1,7 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
 
 namespace SuperMarioH3.MoveableObjects
 {
@@ -15,6 +15,10 @@ namespace SuperMarioH3.MoveableObjects
         // Keyboard states for input handling
         private KeyboardState previousKey;
         private KeyboardState currentKey;
+
+        //Input handling for gamepad
+        private GamePadState currentGamePad;
+        private GamePadState previousGamePad;
 
         // Movement constants
         private const float Gravity = 900f;
@@ -49,6 +53,7 @@ namespace SuperMarioH3.MoveableObjects
             // (DT) Delta Time = “The amount of time that has passed since the last frame (update).”
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; // Delta time calculation
             currentKey = Keyboard.GetState();
+            currentGamePad = GamePad.GetState(PlayerIndex.One);
 
             // Handle movement and jumping
             HandleMovement(dt);
@@ -69,19 +74,27 @@ namespace SuperMarioH3.MoveableObjects
 
             // Update hitbox position
             hitbox.Update(Motion.Position);
+
+            //Update input states
             previousKey = currentKey;
+            previousGamePad = currentGamePad;
         }
 
         // Handle horizontal movement
         private void HandleMovement(float dt)
         {
             float moveDirection = 0f;
-            if (currentKey.IsKeyDown(Keys.Left) || currentKey.IsKeyDown(Keys.A)) // Move left
+            if (currentKey.IsKeyDown(Keys.Left) || currentKey.IsKeyDown(Keys.A) ||
+                currentGamePad.IsButtonDown(Buttons.DPadLeft)) // Move left
                 moveDirection -= 1f;
-            if (currentKey.IsKeyDown(Keys.Right) || currentKey.IsKeyDown(Keys.D)) // Move right
+            if (currentKey.IsKeyDown(Keys.Right) || currentKey.IsKeyDown(Keys.D) ||
+                currentGamePad.IsButtonDown(Buttons.DPadRight)) // Move right
                 moveDirection += 1f;
 
-            float maxSpeed = currentKey.IsKeyDown(Keys.B) || currentKey.IsKeyDown(Keys.LeftShift) // Run
+            //Run
+            float maxSpeed =
+                currentKey.IsKeyDown(Keys.B) || currentKey.IsKeyDown(Keys.LeftShift) ||
+                currentGamePad.IsButtonDown(Buttons.X)
                 ? RunSpeed : WalkSpeed;
 
             // Apply acceleration and deceleration
@@ -109,8 +122,14 @@ namespace SuperMarioH3.MoveableObjects
         private void HandleJumping(float dt)
         {
             bool isOnGround = Motion.Position.Y + texture.Height >= groundRect.Top; // Check if player is on the ground
-            if (isOnGround && currentKey.IsKeyDown(Keys.Space) && !previousKey.IsKeyDown(Keys.Space)) // Jump input
-                Motion.Velocity = new Vector2(Motion.Velocity.X, JumpStrength); // Apply jump velocity
+            if (isOnGround)
+            {
+                if (currentKey.IsKeyDown(Keys.Space) && !previousKey.IsKeyDown(Keys.Space) ||
+                    currentGamePad.IsButtonDown(Buttons.A) && !previousGamePad.IsButtonDown(Buttons.A))
+                {
+                    Motion.Velocity = new Vector2(Motion.Velocity.X, JumpStrength); // Apply jump velocity
+                }
+            }
         }
 
         // Draw method
