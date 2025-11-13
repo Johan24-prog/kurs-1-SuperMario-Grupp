@@ -97,7 +97,9 @@ namespace SuperMarioH3
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
-            _spriteBatch.Begin();
+
+            // Draw everything using the camera transform (one Begin / one End)
+            _spriteBatch.Begin(transformMatrix: camera.Transform);
 
             _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
             player.Draw(_spriteBatch);
@@ -107,10 +109,8 @@ namespace SuperMarioH3
                 if (!coin.Collected)
                     coin.Draw(_spriteBatch);
 
-            // Draw with camera transformation
-            _spriteBatch.Begin(transformMatrix: camera.Transform);
-
             _spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }
