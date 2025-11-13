@@ -30,5 +30,22 @@ namespace SuperMarioH3
             // Rita plattformens textur inom dess rektangel
             spriteBatch.Draw(_texture, _bounds, Color.White);
         }
+
+        // Kolla kollision mellan spelaren och plattformen
+        public bool CheckCollision(Rectangle playerHitbox, ref Vector2 playerPosition, ref Vector2 playerVelocity)
+        {
+            // Kolla om spelarens hitbox kolliderar med plattformens rektangel
+            if (playerHitbox.Bottom > _bounds.Top &&
+                playerHitbox.Top < _bounds.Bottom &&
+                playerHitbox.Right > _bounds.Left &&
+                playerHitbox.Left < _bounds.Right)
+            {
+                // Spelaren landar på plattformen
+                playerPosition.Y = _bounds.Top - playerHitbox.Height;
+                playerVelocity.Y = 0; // Stoppar spelarens fall
+                return true; // Kollision inträffade
+            }
+            return false; // Ingen kollision
+        }
     }
 }
