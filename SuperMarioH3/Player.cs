@@ -31,9 +31,9 @@ namespace SuperMarioH3.MoveableObjects
         // Constructor
         public Player(Texture2D texture, Vector2 startPos, Move moveLimiter, Rectangle groundRect, GraphicsDevice graphics)
         {
-            this.texture = texture;
-            this.moveLimiter = moveLimiter;
-            this.groundRect = groundRect;
+            this.texture = texture; // Set player texture
+            this.moveLimiter = moveLimiter; // Set movement limiter
+            this.groundRect = groundRect; // Set ground rectangle
 
             // Initialize position and hitbox
             Motion = new VectorPosition(startPos.X, startPos.Y);

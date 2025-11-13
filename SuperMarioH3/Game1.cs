@@ -16,6 +16,7 @@ namespace SuperMarioH3
         private Move moveLimiter; // Screen movement limiter
         private Player player; // Player instance
         private List<Coin> coins; // List of coins
+        private Camera2D camera; // Camera instance
 
         // Textures
         private Texture2D coinTexture; // Coin texture
@@ -41,6 +42,11 @@ namespace SuperMarioH3
         {
             groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
             moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
+
+            camera = new Camera2D(GraphicsDevice.Viewport); // Initialize camera
+
+            // Optional world size: let’s say 4000x1080 for a scrolling level
+            // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
         }
 
@@ -61,9 +67,9 @@ namespace SuperMarioH3
             // Initialize coins at different positions
             coins = new List<Coin>
             {
-                new Coin(coinTexture, new Vector2(200, 350), GraphicsDevice),
-                new Coin(coinTexture, new Vector2(300, 350), GraphicsDevice),
-                new Coin(coinTexture, new Vector2(400, 350), GraphicsDevice)
+                new Coin(coinTexture, new Vector2(200, 350), GraphicsDevice), // Coin 1
+                new Coin(coinTexture, new Vector2(300, 350), GraphicsDevice), // Coin 2
+                new Coin(coinTexture, new Vector2(400, 350), GraphicsDevice) // Coin 3
             };
         }
 
@@ -79,6 +85,10 @@ namespace SuperMarioH3
             // Update coins
             foreach (var coin in coins)
                 coin.Update(player.GetHitbox());
+
+            // Update camera to follow player
+            player.Update(gameTime);
+            camera.Follow(player.Motion.Position);
 
             base.Update(gameTime);
         }
@@ -96,6 +106,9 @@ namespace SuperMarioH3
             foreach (var coin in coins)
                 if (!coin.Collected)
                     coin.Draw(_spriteBatch);
+
+            // Draw with camera transformation
+            _spriteBatch.Begin(transformMatrix: camera.Transform);
 
             _spriteBatch.End();
             base.Draw(gameTime);
