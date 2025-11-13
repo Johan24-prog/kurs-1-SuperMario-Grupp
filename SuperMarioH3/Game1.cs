@@ -115,3 +115,13 @@ namespace SuperMarioH3
         }
     }
 }
+// TODO: Add more game features like enemies, power-ups, levels, etc.
+// TODO: Implement terrain and background rendering.
+// TODO: Improve Camera2D functionality if needed.
+// TODO: Implement level design and loading.
+// TODO: Refine player animations and states.
+// TODO: Implement enemy AI and interactions.
+// TODO: Implement coin collection logic and scoring system.
+// TODO: Implement scoring and UI elements.
+// TODO: Implement sound effects and background music. (Optional)
+// TODO: Implement level transitions and checkpoints. (Optional)
