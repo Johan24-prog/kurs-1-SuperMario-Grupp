@@ -38,8 +38,8 @@ namespace SuperMarioH3
         }
 
         // Coins
-        private List<Coin> coins;
-        private Texture2D coinTexture;
+        //private List<Coin> coins;
+        //private Texture2D coinTexture;
 
         // Player properties
         private Texture2D playerTexture;
@@ -53,8 +53,8 @@ namespace SuperMarioH3
         private const float Gravity = 900f;
 
         // Ground
-        private Rectangle groundRect;
-        private Texture2D groundTexture; // reuse instead of allocating every Draw
+        //private Rectangle groundRect;
+        //private Texture2D groundTexture; // reuse instead of allocating every Draw
 
         // Input state
         private KeyboardState currentKey;
@@ -122,10 +122,11 @@ namespace SuperMarioH3
         // Draw game objects
         protected override void Draw(GameTime gameTime)
         {
+            _spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
 
             // Draw ground using the single reused texture
-            _spriteBatch.Draw(groundTexture, groundRect, Color.White);          
+            //_spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 
             _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
             player.Draw(_spriteBatch);
