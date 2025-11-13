@@ -1,16 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 
 namespace SuperMarioH3.MoveableObjects
 {
-    internal class VectorPosition
+    public class VectorPosition
     {
-        // TODO: Implement VectorPosition class
-        // Ex. X and Y coordinates, methods for movement, etc.
-        // This class can be used to represent positions of moveable objects in the game world.
-        // TIP: You might want to copy over Vector2 functionality from "Game1.cs" class (MonoGame) if needed.
+        // Position and Velocity as Vector2 for easier manipulation
+        public Vector2 Position { get; set; }
+        public Vector2 Velocity { get; set; }
+
+        // Constructor to initialize position and velocity
+        public VectorPosition(float x = 0, float y = 0)
+        {
+            Position = new Vector2(x, y);
+            Velocity = Vector2.Zero;
+        }
+
+        // Apply gravity to the vertical component of velocity
+        public void ApplyGravity(float gravity, float deltaTime)
+        {
+            var v = Velocity;
+            v.Y += gravity * deltaTime; // Gravity affects only Y component
+            Velocity = v;
+        }
+
+        // Update position based on velocity and deltaTime
+        public void Update(float deltaTime)
+        {
+            Position += Velocity * deltaTime;  
+        }
+
+        // Clamp position within screen bounds using Move limiter
+        public void ClampToScreen(Move moveLimiter, Vector2 size)
+        {
+            var pos = Position;
+            moveLimiter.Clamp(ref pos, size);
+            Position = pos;
+        }
     }
 }
