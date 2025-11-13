@@ -20,8 +20,10 @@ namespace SuperMarioH3
             IsMouseVisible = true;
 
             // Set preferred window size (example values)
-            _graphics.PreferredBackBufferWidth = 800;
-            _graphics.PreferredBackBufferHeight = 600;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
+            _graphics.IsFullScreen = true;
+            _graphics.ApplyChanges();
         }
 
         // Coins
@@ -51,11 +53,11 @@ namespace SuperMarioH3
         protected override void Initialize()
         {
             // Initialize player position and ground
-            playerPosition = new Vector2(100, 400);
+            playerPosition = new Vector2(100, 850);
             playerVelocity = Vector2.Zero;
 
             // Ground top at y = 400, height set to cover bottom area
-            groundRect = new Rectangle(0, 400, 800, 200);
+            groundRect = new Rectangle(0, 950, 1920, 130);
 
             // Initialize MoveLimiters
             MoveLimiter = new Move(
@@ -226,7 +228,7 @@ namespace SuperMarioH3
             base.Draw(gameTime);
         }
     }
-} // TODO: Make the game full screen with a resolution of 1920x1080 and adjust the MoveLimiter and ground accordingly.
+} 
   // TODO: Add Terrain and Platforms for the player to jump on.
   // TODO: Implement animations for the player and coins.
   // TODO: Make the Game1 class partial and split code into multiple files for better organization.
