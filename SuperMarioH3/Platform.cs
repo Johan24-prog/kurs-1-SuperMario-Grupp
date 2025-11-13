@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using Microsoft.Xna.Framework;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +23,12 @@ namespace SuperMarioH3
             _texture = texture; // Texturen som ritas
             _bounds = bounds; // Rektangeln som beskriver plattformens position och storlek
         }
-      
+
+        // Rita plattformen
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            // Rita plattformens textur inom dess rektangel
+            spriteBatch.Draw(_texture, _bounds, Color.White);
+        }
     }
 }
