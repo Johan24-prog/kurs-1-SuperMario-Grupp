@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,17 +8,29 @@ namespace SuperMarioH3
 {
     public class Game1 : Game
     {
+        // Fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
-        private Move MoveLimiter;
 
+        // Game objects
+        private Move moveLimiter; // Screen movement limiter
+        private Player player; // Player instance
+        private List<Coin> coins; // List of coins
+        private Camera2D camera; // Camera instance
+
+        // Textures
+        private Texture2D coinTexture; // Coin texture
+        private Texture2D groundTexture; // Ground texture
+        private Rectangle groundRect; // Ground rectangle
+
+        // Constructor
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            _graphics = new GraphicsDeviceManager(this); // Initialize graphics manager
+            Content.RootDirectory = "Content"; // Set content root directory
+            IsMouseVisible = true; // Show mouse cursor
 
-            // Set preferred window size (example values)
+            // Set full screen resolution
             _graphics.PreferredBackBufferWidth = 1920;
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.IsFullScreen = true;
@@ -55,183 +66,88 @@ namespace SuperMarioH3
 
         protected override void Initialize()
         {
-            // Initialize player position and ground
-            playerPosition = new Vector2(100, 850);
-            playerVelocity = Vector2.Zero;
+            groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
+            moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
 
-            // Ground top at y = 400, height set to cover bottom area
-            groundRect = new Rectangle(0, 950, 1920, 130);
+            camera = new Camera2D(GraphicsDevice.Viewport); // Initialize camera
 
-            // Initialize MoveLimiters
-            MoveLimiter = new Move(
-                _graphics.PreferredBackBufferWidth);
-
-            // Initialize previousKey to current keyboard state to avoid false "just pressed" detections on first frame
-            previousKey = Keyboard.GetState();
-
+            // Optional world size: let’s say 4000x1080 for a scrolling level
+            // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
         }
 
+        // Load game content
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice); // Initialize SpriteBatch
 
-            // Load textures
-            playerTexture = Content.Load<Texture2D>("MarioOneLife");
-            coinTexture = Content.Load<Texture2D>("Coin");
+            Texture2D playerTexture = Content.Load<Texture2D>("MarioOneLife"); // Load player texture
+            coinTexture = Content.Load<Texture2D>("Coin"); // Load coin texture
 
-            // Create a single 1x1 ground texture and reuse it (avoid allocating each Draw)
-            groundTexture = new Texture2D(GraphicsDevice, 1, 1);
-            groundTexture.SetData(new[] { Color.ForestGreen });
+            groundTexture = new Texture2D(GraphicsDevice, 1, 1); // Create ground texture
+            groundTexture.SetData(new[] { Color.ForestGreen }); // Set ground color
 
+            // Initialize player
+            player = new Player(playerTexture, new Vector2(100, 850), moveLimiter, groundRect, GraphicsDevice);
+
+            // Initialize coins at different positions
             coins = new List<Coin>
             {
-                new Coin(coinTexture, new Vector2(200, 350), GraphicsDevice),
-                new Coin(coinTexture, new Vector2(300, 350), GraphicsDevice),
-                new Coin(coinTexture, new Vector2(400, 350), GraphicsDevice)
+                new Coin(coinTexture, new Vector2(200, 350), GraphicsDevice), // Coin 1
+                new Coin(coinTexture, new Vector2(300, 350), GraphicsDevice), // Coin 2
+                new Coin(coinTexture, new Vector2(400, 350), GraphicsDevice) // Coin 3
             };
-
-            // Initialize player's hitbox
-            playerHitbox = new Hitbox(GraphicsDevice, (int)playerPosition.X, (int)playerPosition.Y, playerTexture.Width, playerTexture.Height);
-
         }
 
+        // Update game logic
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape)) // Exit Game on Escape key
                 Exit();
 
-            currentKey = Keyboard.GetState();
+            // Update player
+            player.Update(gameTime);
 
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            //TODO: Flytta all kod som hanterar spelarns uppdatering till dennes klass
-
-            float walkSpeed = 180f;
-            float runSpeed = 250f;
-            float accel = 1500f;
-            float decel = 3000f;
-            float turnDecel = 5000f;
-
-            // Horizontal movement
-            float moveDirection = 0f;
-            if (currentKey.IsKeyDown(Keys.Left) || currentKey.IsKeyDown(Keys.A))
-                moveDirection -= 1f;
-            if (currentKey.IsKeyDown(Keys.Right) || currentKey.IsKeyDown(Keys.D))
-                moveDirection += 1f;
-
-            float maxSpeed = walkSpeed;
-            if (currentKey.IsKeyDown(Keys.B) || currentKey.IsKeyDown(Keys.LeftShift))
-                maxSpeed = runSpeed;
-
-            if (moveDirection != 0)
-            {
-                // if player changes direction, faster decel. 
-                if (Math.Sign(playerVelocity.X) != Math.Sign(moveDirection) && playerVelocity.X != 0)
-                {
-                    // Decelerate quickly
-                    playerVelocity.X += moveDirection * turnDecel * dt;
-                }
-                else
-                {
-                    // Normal acceleration
-                    playerVelocity.X += moveDirection * accel * dt;
-                }
-
-                // Clamp to max speed
-                if (playerVelocity.X > maxSpeed) playerVelocity.X = maxSpeed;
-                if (playerVelocity.X < -maxSpeed) playerVelocity.X = -maxSpeed;
-            }
-            else
-            {
-                // No input, normal deccel
-                if (playerVelocity.X > 0)
-                {
-                    playerVelocity.X -= decel * dt;
-                    if (playerVelocity.X < 0) playerVelocity.X = 0;
-                }
-                else if (playerVelocity.X < 0)
-                {
-                    playerVelocity.X += decel * dt;
-                    if (playerVelocity.X > 0) playerVelocity.X = 0;
-                }
-            }
-
-            // Move player
-            //playerVelocity.X = moveDirection * MoveSpeed;
-
-            // Jumping: check if on ground and space was just pressed
-            bool isOnGround = playerPosition.Y + (playerTexture?.Height ?? 16) >= groundRect.Y;
-            if (isOnGround && currentKey.IsKeyDown(Keys.Space) && !previousKey.IsKeyDown(Keys.Space))
-            {
-                playerVelocity.Y = jumpStrength;
-            }
-
-            // Apply gravity
-            playerVelocity.Y += Gravity * dt;
-
-            // Update position
-            playerPosition += playerVelocity * dt;
-
-            // Keep player within screen bounds
-            MoveLimiter.Clamp(ref playerPosition, new Vector2(playerTexture.Width, playerTexture.Height));
-
-            // Simple collision with ground
-            int playerWidth = playerTexture?.Width ?? 16;
-            int playerHeight = playerTexture?.Height ?? 16;
-            Rectangle playerRect = new Rectangle((int)playerPosition.X, (int)playerPosition.Y, playerWidth, playerHeight);
-
-            if (playerRect.Bottom >= groundRect.Top)
-            {
-                // Snap to ground
-                playerPosition.Y = groundRect.Top - playerHeight;
-                playerVelocity.Y = 0;
-                playerRect.Y = (int)playerPosition.Y;
-            }
-
-            // Update player's hitbox to current position
-            playerHitbox.Update(playerPosition);
-
-            // Update coins in Update (not Draw) so game logic is separated from rendering
+            // Update coins
             foreach (var coin in coins)
-            {
-                coin.Update(playerHitbox);
-            }
+                coin.Update(player.GetHitbox());
 
-            previousKey = currentKey;
+            // Update camera to follow player
+            player.Update(gameTime);
+            camera.Follow(player.Motion.Position);
+
             base.Update(gameTime);
         }
 
-        private bool IsOnGround()
-        {
-            return playerPosition.Y + (playerTexture?.Height ?? 16) >= groundRect.Y;
-        }
-
+        // Draw game objects
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin();
+            GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
 
             // Draw ground using the single reused texture
             _spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 
-            // Draw player
-            _spriteBatch.Draw(playerTexture, playerPosition, Color.White);
+            _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
+            player.Draw(_spriteBatch);
 
-            // Draw coins (call their Draw method)
+            // Draw uncollected coins
             foreach (var coin in coins)
-            {
                 if (!coin.Collected)
                     coin.Draw(_spriteBatch);
-            }
 
             _spriteBatch.End();
 
             base.Draw(gameTime);
         }
     }
-} 
-  // TODO: Add Terrain and Platforms for the player to jump on.
-  // TODO: Implement animations for the player and coins.
-  // TODO: Make the Game1 class partial and split code into multiple files for better organization.
+}
+// TODO: Add more game features like enemies, power-ups, levels, etc.
+// TODO: Implement terrain and background rendering.
+// TODO: Improve Camera2D functionality if needed.
+// TODO: Implement level design and loading.
+// TODO: Refine player animations and states.
+// TODO: Implement enemy AI and interactions.
+// TODO: Implement coin collection logic and scoring system.
+// TODO: Implement scoring and UI elements.
+// TODO: Implement sound effects and background music. (Optional)
+// TODO: Implement level transitions and checkpoints. (Optional)
