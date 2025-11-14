@@ -9,9 +9,12 @@ namespace SuperMarioH3.MoveableObjects
     public class Player
     {
         // Fields
-        private Texture2D texture;
-        private Hitbox hitbox;
-        private Move moveLimiter;
+        private Texture2D texture; // Player texture
+        private Hitbox hitbox; // Player's hitbox
+        private Hitbox playerOldHitbox; // Previous hitbox for collision detection
+        private Move moveLimiter; // Movement limiter for screen bounds
+        private Vector2 oldPlayerPosition; // Previous player position for collision detection
+        
 
         // Keyboard states for input handling
         private KeyboardState previousKey;
@@ -43,6 +46,8 @@ namespace SuperMarioH3.MoveableObjects
             // Initialize position and hitbox
             Motion = new VectorPosition(startPos.X, startPos.Y);
             hitbox = new Hitbox(graphics, (int)startPos.X, (int)startPos.Y, texture.Width, texture.Height);
+            playerOldHitbox = new Hitbox(graphics, (int)startPos.X, (int)startPos.Y, texture.Width, texture.Height);
+
 
             // Initialize keyboard state
             previousKey = Keyboard.GetState();
@@ -53,6 +58,10 @@ namespace SuperMarioH3.MoveableObjects
         {
             // (DT) Delta Time = “The amount of time that has passed since the last frame (update).”
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds; // Delta time calculation
+            // Save old position BEFORE movement update for collision detection
+            oldPlayerPosition = Motion.Position;
+            playerOldHitbox.Update(oldPlayerPosition);
+
             currentKey = Keyboard.GetState();
             currentGamePad = GamePad.GetState(PlayerIndex.One);
 
@@ -143,27 +152,41 @@ namespace SuperMarioH3.MoveableObjects
 
         public void HandlePlatforms(List<Platform> platforms, float dt)
         {
+            // Flag to check if player is on any platform
             bool onPlatform = false;
 
+            // Current position and velocity
             Vector2 position = Motion.Position;
             Vector2 velocity = Motion.Velocity;
 
+            // Current and old hitbox rectangles for collision detection
+            Rectangle currentBox = hitbox.Bounds;
+            Rectangle oldBox = playerOldHitbox.Bounds;
+
+            // Check collision with each platform
             foreach (var plat in platforms)
             {
-                if (plat.CheckCollision(hitbox.Bounds, ref position, ref velocity))
+                if (plat.CheckCollision(currentBox, oldBox, ref position, ref velocity))
+                {
                     onPlatform = true;
+                    break;
+                }
             }
 
+            // Update position and velocity after platform collision checks
             Motion.Position = position;
             Motion.Velocity = velocity;
 
+            // If not on platform or ground → apply gravity
             bool isOnGround = Motion.Position.Y + texture.Height >= groundRect.Top;
+
+            // Apply gravity if not on platform and not on ground
             if (!onPlatform && !isOnGround)
             {
                 Motion.ApplyGravity(Gravity, dt);
             }
-
         }
+
 
     }
 }
