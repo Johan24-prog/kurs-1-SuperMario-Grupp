@@ -107,14 +107,14 @@ namespace SuperMarioH3
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) // Exit Game on Escape key
                 Exit();
 
-            // Update player
+            // Update player movement and gravity
             player.Update(gameTime);
-
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // Let the player class handle collisions with platforms
             player.HandlePlatforms(platforms, dt);
 
-
-            // Update coins
+            // Update coins (hitbox comes from Player class)
             foreach (var coin in coins)
                 coin.Update(player.GetHitbox());
 
