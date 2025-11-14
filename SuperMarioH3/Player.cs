@@ -23,7 +23,7 @@ namespace SuperMarioH3.MoveableObjects
 
         // Movement constants
         private const float Gravity = 900f;
-        private const float JumpStrength = -400f;
+        private const float JumpStrength = -700f;
         private const float WalkSpeed = 180f;
         private const float RunSpeed = 250f;
         private const float Accel = 1500f;
