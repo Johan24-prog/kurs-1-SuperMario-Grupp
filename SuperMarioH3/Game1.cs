@@ -97,6 +97,19 @@ namespace SuperMarioH3
                 new Coin(coinTexture, new Vector2(300, 350), GraphicsDevice), // Coin 2
                 new Coin(coinTexture, new Vector2(400, 350), GraphicsDevice) // Coin 3
             };
+
+            // Initialize platform texture
+            platformTexture = new Texture2D(GraphicsDevice, 1, 1);
+            platformTexture.SetData(new[] { Color.Brown });
+
+            // Initialize platforms
+            platforms = new List<Platform>
+            {
+                new Platform(platformTexture, new Rectangle(500, 800, 200, 20)), // Platform 1
+                new Platform(platformTexture, new Rectangle(800, 700, 200, 20)), // Platform 2
+                new Platform(platformTexture, new Rectangle(1200, 600, 200, 20)) // Platform 3
+            };
+
         }
 
         // Update game logic
