@@ -32,20 +32,35 @@ namespace SuperMarioH3
         }
 
         // Kolla kollision mellan spelaren och plattformen
-        public bool CheckCollision(Rectangle playerHitbox, ref Vector2 playerPosition, ref Vector2 playerVelocity)
+        // Returnerar true om en kollision sker och justerar spelarens position och hastighet
+        // Adjusted this part to fix the player snapping to the platform and getting stuck issue - Johan
+        public bool CheckCollision(Rectangle playerHitbox, Rectangle playerOldHitbox,
+                           ref Vector2 playerPosition, ref Vector2 playerVelocity)
         {
-            // Kolla om spelarens hitbox kolliderar med plattformens rektangel
-            if (playerHitbox.Bottom > _bounds.Top &&
-                playerHitbox.Top < _bounds.Bottom &&
-                playerHitbox.Right > _bounds.Left &&
-                playerHitbox.Left < _bounds.Right)
+            // Only when falling downward
+            if (playerVelocity.Y >= 0)
             {
-                // Spelaren landar på plattformen
-                playerPosition.Y = _bounds.Top - playerHitbox.Height;
-                playerVelocity.Y = 0; // Stoppar spelarens fall
-                return true; // Kollision inträffade
+                // Check if the player was above the platform in the previous frame
+                bool wasAbove = playerOldHitbox.Bottom <= _bounds.Top;
+
+                // Check if the player intersects the top of the platform
+                bool intersectsTop =
+                    playerHitbox.Bottom >= _bounds.Top &&
+                    playerHitbox.Top < _bounds.Bottom &&
+                    playerHitbox.Right > _bounds.Left &&
+                    playerHitbox.Left < _bounds.Right;
+
+                // If both conditions are met, snap the player to the top of the platform
+                if (wasAbove && intersectsTop)
+                {
+                    // Snap player to the top of the platform
+                    playerPosition.Y = _bounds.Top - playerHitbox.Height;
+                    playerVelocity.Y = 0;
+                    return true;
+                }
             }
-            return false; // Ingen kollision
+            // No collision detected
+            return false;
         }
     }
 }
