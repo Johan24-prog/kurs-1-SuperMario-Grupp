@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -139,5 +140,31 @@ namespace SuperMarioH3.MoveableObjects
         }
 
         public Hitbox GetHitbox() => hitbox; // Get player's hitbox
+
+        public void HandlePlatforms(List<Platform> platforms, float dt)
+        {
+            bool onPlatform = false;
+
+            Vector2 position = Motion.Position;
+            Vector2 velocity = Motion.Velocity;
+
+            foreach (var plat in platforms)
+            {
+                if (plat.CheckCollision(hitbox.Bounds, ref position, ref velocity))
+                    onPlatform = true;
+            }
+
+            Motion.Position = position;
+            Motion.Velocity = velocity;
+
+            bool isOnGround = Motion.Position.Y + texture.Height >= groundRect.Top;
+            if (!onPlatform && !isOnGround)
+            {
+                Motion.ApplyGravity(Gravity, dt);
+            }
+
+        }
+
     }
 }
+

@@ -121,6 +121,10 @@ namespace SuperMarioH3
             // Update player
             player.Update(gameTime);
 
+            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            player.HandlePlatforms(platforms, dt);
+
+
             // Update coins
             foreach (var coin in coins)
                 coin.Update(player.GetHitbox());
@@ -143,6 +147,9 @@ namespace SuperMarioH3
 
             _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
             player.Draw(_spriteBatch);
+
+            foreach (var plat in platforms)
+                plat.Draw(_spriteBatch);
 
             // Draw uncollected coins
             foreach (var coin in coins)
