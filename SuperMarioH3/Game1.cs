@@ -39,28 +39,10 @@ namespace SuperMarioH3
             _graphics.ApplyChanges();
         }
 
-        // Coins
-        //private List<Coin> coins;
-        //private Texture2D coinTexture;
-
-        // Player properties
-        private Texture2D playerTexture;
-        private Vector2 playerPosition;
-        private Vector2 playerVelocity;
-        private Hitbox playerHitbox;
-
         // Movement constants (example values)
         private const float MoveSpeed = 150f;
         private const float jumpStrength = -400f;
         private const float Gravity = 900f;
-
-        // Ground
-        //private Rectangle groundRect;
-        //private Texture2D groundTexture; // reuse instead of allocating every Draw
-
-        // Input state
-        private KeyboardState currentKey;
-        private KeyboardState previousKey;
 
         protected override void Initialize()
         {
