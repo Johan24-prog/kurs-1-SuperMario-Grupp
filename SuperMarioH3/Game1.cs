@@ -2,13 +2,22 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SuperMarioH3.Menu;
 using SuperMarioH3.MoveableObjects;
 
 namespace SuperMarioH3
 {
     public class Game1 : Game
     {
+        //State of game
         public enum GameState { Menu, Playing }
+        public GameState State { get; private set; }
+
+        //Font
+        SpriteFont font;
+
+        //Menu
+        MenuScreen startScreen;
 
         // Fields
         private GraphicsDeviceManager _graphics;
@@ -48,6 +57,7 @@ namespace SuperMarioH3
 
         protected override void Initialize()
         {
+            State = GameState.Menu;
             groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
             moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
 
@@ -56,12 +66,17 @@ namespace SuperMarioH3
             // Optional world size: let’s say 4000x1080 for a scrolling level
             // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
+
+            startScreen = new MenuScreen(this, font, _spriteBatch);
         }
 
         // Load game content
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice); // Initialize SpriteBatch
+
+            //Load font
+            font = Content.Load<SpriteFont>("Retro");
 
             Texture2D playerTexture = Content.Load<Texture2D>("MarioOneLife"); // Load player texture
             coinTexture = Content.Load<Texture2D>("Coin"); // Load coin texture
@@ -109,48 +124,60 @@ namespace SuperMarioH3
             if (Keyboard.GetState().IsKeyDown(Keys.Escape)) // Exit Game on Escape key
                 Exit();
 
-            // Update player movement and gravity
-            player.Update(gameTime);
-            float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            if (State == GameState.Menu)
+            {
+                startScreen.Update(gameTime);
+            }
+            else
+            {
+                // Update player movement and gravity
+                player.Update(gameTime);
+                float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Let the player class handle collisions with platforms
-            player.HandlePlatforms(platforms, dt);
+                // Let the player class handle collisions with platforms
+                player.HandlePlatforms(platforms, dt);
 
-            // Update coins (hitbox comes from Player class)
-            foreach (var coin in coins)
-                coin.Update(player.GetHitbox());
+                // Update coins (hitbox comes from Player class)
+                foreach (var coin in coins)
+                    coin.Update(player.GetHitbox());
 
-            // Update camera to follow player
-            player.Update(gameTime);
-            camera.Follow(player.Motion.Position);
+                // Update camera to follow player
+                player.Update(gameTime);
+                camera.Follow(player.Motion.Position);
 
-            base.Update(gameTime);
+                base.Update(gameTime);
+            }
         }
 
         // Draw game objects
         protected override void Draw(GameTime gameTime)
         {
-            _spriteBatch.Begin();
             GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
 
-            // Draw ground using the single reused texture
-            //_spriteBatch.Draw(groundTexture, groundRect, Color.White);          
+            if (State == GameState.Menu)
+                startScreen.Draw(gameTime);
+            else
+            {
+                _spriteBatch.Begin();
+                // Draw ground using the single reused texture
+                //_spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 
-            _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
-            player.Draw(_spriteBatch);
+                _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
+                player.Draw(_spriteBatch);
 
-            foreach (var plat in platforms)
-                plat.Draw(_spriteBatch);
+                foreach (var plat in platforms)
+                    plat.Draw(_spriteBatch);
 
-            // Draw uncollected coins
-            foreach (var coin in coins)
-                if (!coin.Collected)
-                    coin.Draw(_spriteBatch);
-
-            _spriteBatch.End();
+                // Draw uncollected coins
+                foreach (var coin in coins)
+                    if (!coin.Collected)
+                        coin.Draw(_spriteBatch);
+                _spriteBatch.End();
+            }
 
             base.Draw(gameTime);
         }
+        public void StartGame() => State = GameState.Playing;
     }
 }
 // TODO: Add more game features like enemies, power-ups, levels, etc.

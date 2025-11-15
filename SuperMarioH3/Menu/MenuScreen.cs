@@ -37,12 +37,26 @@ namespace SuperMarioH3.Menu
 
         public void Update(GameTime gameTime)
         {
+            MouseState mouse = Mouse.GetState();
 
+            foreach (var button in buttons)
+                button.Update(mouse);
+
+            if (buttons[0].IsClicked)
+                game.StartGame();
+
+            if (buttons[1].IsClicked) { }
+            //ExitGame();
         }
 
         public void Draw(GameTime gameTime)
         {
-
+            spriteBatch.Begin();
+            foreach (var button in buttons)
+            {
+                button.Draw(spriteBatch);
+            }
+            spriteBatch.End();
         }
     }
 }
