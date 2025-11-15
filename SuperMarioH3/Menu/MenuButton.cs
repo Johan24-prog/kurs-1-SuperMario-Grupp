@@ -37,11 +37,15 @@ namespace SuperMarioH3.Menu
         }
         public void Update(MouseState mouse)
         {
-
+            IsHovering = buttonBox.Contains(mouse.Position);
+            IsClicked = IsHovering && mouse.LeftButton == ButtonState.Pressed;
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(font, buttonText, textPos, Color.White);
+            Color color = IsHovering ? Color.Yellow : Color.White;
+
+            spriteBatch.DrawString(
+                font, buttonText, textPos, color, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
         }
     }
 }
