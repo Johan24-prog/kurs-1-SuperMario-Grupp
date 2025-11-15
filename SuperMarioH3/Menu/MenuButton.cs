@@ -7,21 +7,30 @@ namespace SuperMarioH3.Menu
     public class MenuButton
     {
         SpriteFont font;
+
         Rectangle buttonBox;
 
-        string buttonText;
         Vector2 textPos;
+        Vector2 origin;
 
-        public MenuButton(SpriteFont font, string buttonText, Vector2 messagePos)
+        string buttonText;
+
+        public bool IsHovering { get; set; }
+        public bool IsClicked { get; set; }
+
+        public MenuButton(SpriteFont font, string buttonText, Vector2 textPos)
         {
             this.font = font;
             this.buttonText = buttonText;
-            this.textPos = messagePos;
+            this.textPos = textPos;
 
             Vector2 textSize = font.MeasureString(buttonText);
+            //Set origin to middle of string
+            origin = textSize * 0.5f;
+
             buttonBox = new Rectangle(
-                (int)messagePos.X,
-                (int)messagePos.Y,
+                (int)(textPos.X - origin.X),
+                (int)(textPos.Y - origin.Y),
                 (int)textSize.X,
                 (int)textSize.Y
             );
