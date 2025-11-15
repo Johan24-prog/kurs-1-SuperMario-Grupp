@@ -8,6 +8,8 @@ namespace SuperMarioH3
 {
     public class Game1 : Game
     {
+        public enum GameState { Menu, Playing }
+
         // Fields
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
