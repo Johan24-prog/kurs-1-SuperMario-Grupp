@@ -35,6 +35,7 @@ namespace SuperMarioH3
         private Texture2D groundTexture; // Ground texture
         private Rectangle groundRect; // Ground rectangle
         private Texture2D platformTexture; // Platform texture
+        private Texture2D mushroomTexture;
 
         // Constructor
         public Game1()
@@ -57,7 +58,9 @@ namespace SuperMarioH3
 
         protected override void Initialize()
         {
+            //Ändra denna till GameState.Playing för att skippa menyn
             State = GameState.Menu;
+
             groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
             moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
 
@@ -67,7 +70,7 @@ namespace SuperMarioH3
             // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
 
-            startScreen = new MenuScreen(this, font, _spriteBatch);
+            startScreen = new MenuScreen(this, font, _spriteBatch, mushroomTexture);
         }
 
         // Load game content
@@ -80,6 +83,8 @@ namespace SuperMarioH3
 
             Texture2D playerTexture = Content.Load<Texture2D>("MarioOneLife"); // Load player texture
             coinTexture = Content.Load<Texture2D>("Coin"); // Load coin texture
+            //mushroom texture
+            mushroomTexture = Content.Load<Texture2D>("PowerUpOne");
 
             groundTexture = new Texture2D(GraphicsDevice, 1, 1); // Create ground texture
             groundTexture.SetData(new[] { Color.ForestGreen }); // Set ground color
