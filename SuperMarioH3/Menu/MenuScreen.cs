@@ -11,11 +11,18 @@ namespace SuperMarioH3.Menu
 
         private Game1 game;
         private SpriteBatch spriteBatch;
+        private Texture2D smallIcon;
 
-        public MenuScreen(Game1 game, SpriteFont font, SpriteBatch spriteBatch)
+        Vector2 iconOrigin;
+
+        public MenuScreen(Game1 game, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
         {
             this.game = game;
             this.spriteBatch = spriteBatch;
+            this.smallIcon = smallIcon;
+
+            //center origin of icon
+            iconOrigin = new Vector2(smallIcon.Width * 0.5f, smallIcon.Height * 0.5f);
 
             //offset space between buttons
             var spacing = font.LineSpacing * 1.7f;
@@ -54,6 +61,19 @@ namespace SuperMarioH3.Menu
             spriteBatch.Begin();
             foreach (var button in buttons)
             {
+                if (button.IsHovering)
+                {
+                    var spacing = button.LineSpacing * 0.5f;
+                    var bounds = button.Bounds;
+                    //Before menu text
+                    var iconPos = new Vector2(bounds.Left - spacing - iconOrigin.X, bounds.Y + bounds.Height * 0.5f);
+                    spriteBatch.Draw(
+                        smallIcon, iconPos, null, Color.White, 0f, iconOrigin, 1f, SpriteEffects.None, 0f);
+                    //After menu text
+                    iconPos = new Vector2(bounds.Right + spacing + iconOrigin.X, bounds.Y + bounds.Height * 0.5f);
+                    spriteBatch.Draw(
+                        smallIcon, iconPos, null, Color.White, 0f, iconOrigin, 1f, SpriteEffects.None, 0f);
+                }
                 button.Draw(spriteBatch);
             }
             spriteBatch.End();
