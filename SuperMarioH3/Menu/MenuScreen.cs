@@ -66,11 +66,11 @@ namespace SuperMarioH3.Menu
                     var spacing = button.LineSpacing * 0.5f;
                     var bounds = button.Bounds;
                     //Before menu text
-                    var iconPos = new Vector2(bounds.Left - spacing - iconOrigin.X, bounds.Y + bounds.Height * 0.5f);
+                    var iconPos = new Vector2(bounds.Left - spacing - iconOrigin.X, bounds.Y + bounds.Height * 0.5f - 5);
                     spriteBatch.Draw(
                         smallIcon, iconPos, null, Color.White, 0f, iconOrigin, 1f, SpriteEffects.None, 0f);
                     //After menu text
-                    iconPos = new Vector2(bounds.Right + spacing + iconOrigin.X, bounds.Y + bounds.Height * 0.5f);
+                    iconPos = new Vector2(bounds.Right + spacing + iconOrigin.X, bounds.Y + bounds.Height * 0.5f - 5);
                     spriteBatch.Draw(
                         smallIcon, iconPos, null, Color.White, 0f, iconOrigin, 1f, SpriteEffects.None, 0f);
                 }

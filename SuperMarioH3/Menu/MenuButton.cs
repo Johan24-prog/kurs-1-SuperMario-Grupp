@@ -31,7 +31,7 @@ namespace SuperMarioH3.Menu
             origin = textSize * 0.5f;
 
             buttonBox = new Rectangle(
-                (int)(textPos.X - origin.X - 5),
+                (int)(textPos.X - origin.X - 3),
                 (int)(textPos.Y - origin.Y),
                 (int)textSize.X,
                 (int)textSize.Y
