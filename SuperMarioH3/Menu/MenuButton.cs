@@ -15,8 +15,10 @@ namespace SuperMarioH3.Menu
 
         string buttonText;
 
+        public Rectangle Bounds => buttonBox;
         public bool IsHovering { get; set; }
         public bool IsClicked { get; set; }
+        public float LineSpacing => font.LineSpacing;
 
         public MenuButton(SpriteFont font, string buttonText, Vector2 textPos)
         {
@@ -29,7 +31,7 @@ namespace SuperMarioH3.Menu
             origin = textSize * 0.5f;
 
             buttonBox = new Rectangle(
-                (int)(textPos.X - origin.X),
+                (int)(textPos.X - origin.X - 5),
                 (int)(textPos.Y - origin.Y),
                 (int)textSize.X,
                 (int)textSize.Y
@@ -42,7 +44,7 @@ namespace SuperMarioH3.Menu
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            Color color = IsHovering ? Color.Yellow : Color.White;
+            Color color = IsHovering ? Color.White : Color.GhostWhite;
 
             spriteBatch.DrawString(
                 font, buttonText, textPos, color, 0.0f, origin, 1.0f, SpriteEffects.None, 0.0f);
