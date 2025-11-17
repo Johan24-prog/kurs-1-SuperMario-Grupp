@@ -109,3 +109,14 @@ namespace SuperMarioH3
         }
     }
 }
+// TODO: Add aggressive behaviors for enemies, such as chasing the player.
+// TODO: Make the enemy be able to patrol between two points.
+// TODO: Make the enemy be able to jump over obstacles, platforms, etc.
+// -------------------------- OPTIONAL --------------------------
+// TODO: Implement animation frames for enemy movement and death.
+// TODO: Integrate enemy AI for more complex behaviors.
+// TODO: Add different enemy types with unique behaviors.
+// TODO: Implement sound effects for enemy actions.
+// TODO: Optimize collision detection for multiple enemies.
+// TODO: Add particle effects on enemy death.
+// TODO: Integrate enemy AI for more complex behaviors.
