@@ -180,14 +180,7 @@ namespace SuperMarioH3.MoveableObjects
             Motion.Position = position;
             Motion.Velocity = velocity;
 
-            // If not on platform or ground → apply gravity
-            bool isOnGround = Motion.Position.Y + texture.Height >= groundRect.Top;
-
-            // Apply gravity if not on platform and not on ground
-            if (!isOnPlatform && !isOnGround)
-            {
-                Motion.ApplyGravity(Gravity, dt);
-            }
+            // NOTE: gravity is handled once per frame in Update(), so do NOT apply it here.
         }
 
 

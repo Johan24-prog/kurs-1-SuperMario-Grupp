@@ -147,7 +147,6 @@ namespace SuperMarioH3
                     coin.Update(player.GetHitbox());
 
                 // Update camera to follow player
-                player.Update(gameTime);
                 camera.Follow(player.Motion.Position);
 
                 base.Update(gameTime);
