@@ -14,7 +14,8 @@ namespace SuperMarioH3.MoveableObjects
         private Hitbox playerOldHitbox; // Previous hitbox for collision detection
         private Move moveLimiter; // Movement limiter for screen bounds
         private Vector2 oldPlayerPosition; // Previous player position for collision detection
-        
+
+        private bool isOnPlatform = false; // check if player is on a platform
 
         // Keyboard states for input handling
         private KeyboardState previousKey;
@@ -186,6 +187,7 @@ namespace SuperMarioH3.MoveableObjects
                 Motion.ApplyGravity(Gravity, dt);
             }
         }
+
 
 
     }
