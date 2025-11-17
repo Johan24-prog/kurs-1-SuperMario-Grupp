@@ -133,7 +133,9 @@ namespace SuperMarioH3.MoveableObjects
         private void HandleJumping(float dt)
         {
             bool isOnGround = Motion.Position.Y + texture.Height >= groundRect.Top; // Check if player is on the ground
-            if (isOnGround)
+
+            bool canJump = isOnGround || isOnPlatform;
+            if (canJump)
             {
                 if (currentKey.IsKeyDown(Keys.Space) && !previousKey.IsKeyDown(Keys.Space) ||
                     currentGamePad.IsButtonDown(Buttons.A) && !previousGamePad.IsButtonDown(Buttons.A))
