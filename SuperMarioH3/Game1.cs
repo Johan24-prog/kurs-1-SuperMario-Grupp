@@ -36,6 +36,8 @@ namespace SuperMarioH3
         private Rectangle groundRect; // Ground rectangle
         private Texture2D platformTexture; // Platform texture
         private Texture2D mushroomTexture;
+        private List<Enemy> enemies;
+        private Texture2D goombaTexture;
 
         // Constructor
         public Game1()
@@ -92,6 +94,14 @@ namespace SuperMarioH3
             // Initialize player
             player = new Player(playerTexture, new Vector2(100, 850), moveLimiter, groundRect, GraphicsDevice);
 
+            goombaTexture = Content.Load<Texture2D>("Goomba");
+
+            enemies = new List<Enemy>()
+            {
+                new Enemy(goombaTexture, new Vector2(400, groundRect.Top - goombaTexture.Height)),
+                new Enemy(goombaTexture, new Vector2(1000, groundRect.Top - goombaTexture.Height)),
+            };
+
             // Initialize coins at different positions
             coins = new List<Coin>
             {
@@ -139,6 +149,11 @@ namespace SuperMarioH3
                 player.Update(gameTime);
                 float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
+                // Update enemies
+                Rectangle worldBounds = new Rectangle(0, 0, 1920, 1080); // Example level size
+                foreach (var enemy in enemies)
+                    enemy.Update(gameTime, platforms, groundRect, worldBounds);
+
                 // Let the player class handle collisions with platforms
                 player.HandlePlatforms(platforms, dt);
 
@@ -148,6 +163,8 @@ namespace SuperMarioH3
 
                 // Update camera to follow player
                 camera.Follow(player.Motion.Position);
+
+
 
                 base.Update(gameTime);
             }
@@ -171,6 +188,10 @@ namespace SuperMarioH3
 
                 foreach (var plat in platforms)
                     plat.Draw(_spriteBatch);
+
+                // Draw enemies
+                foreach (var enemy in enemies)
+                    enemy.Draw(_spriteBatch);
 
                 // Draw uncollected coins
                 foreach (var coin in coins)
