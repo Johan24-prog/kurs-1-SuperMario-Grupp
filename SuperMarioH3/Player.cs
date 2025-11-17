@@ -154,7 +154,7 @@ namespace SuperMarioH3.MoveableObjects
         public void HandlePlatforms(List<Platform> platforms, float dt)
         {
             // Flag to check if player is on any platform
-            bool onPlatform = false;
+            isOnPlatform = false;
 
             // Current position and velocity
             Vector2 position = Motion.Position;
@@ -169,7 +169,7 @@ namespace SuperMarioH3.MoveableObjects
             {
                 if (plat.CheckCollision(currentBox, oldBox, ref position, ref velocity))
                 {
-                    onPlatform = true;
+                    isOnPlatform = true;
                     break;
                 }
             }
@@ -182,7 +182,7 @@ namespace SuperMarioH3.MoveableObjects
             bool isOnGround = Motion.Position.Y + texture.Height >= groundRect.Top;
 
             // Apply gravity if not on platform and not on ground
-            if (!onPlatform && !isOnGround)
+            if (!isOnPlatform && !isOnGround)
             {
                 Motion.ApplyGravity(Gravity, dt);
             }
