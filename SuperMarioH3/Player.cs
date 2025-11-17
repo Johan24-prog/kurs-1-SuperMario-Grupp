@@ -33,6 +33,7 @@ namespace SuperMarioH3.MoveableObjects
         private const float Accel = 1500f;
         private const float Decel = 3000f;
         private const float TurnDecel = 5000f;
+        // TODO: Update these values for better feeling in-game
 
         private Rectangle groundRect; // Ground rectangle for collision
         public VectorPosition Motion { get; private set; } // Player's position and velocity
