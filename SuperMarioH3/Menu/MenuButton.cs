@@ -1,6 +1,6 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace SuperMarioH3.Menu
 {
@@ -20,11 +20,14 @@ namespace SuperMarioH3.Menu
         public bool IsClicked { get; set; }
         public float LineSpacing => font.LineSpacing;
 
-        public MenuButton(SpriteFont font, string buttonText, Vector2 textPos)
+        public Action OnClick;
+
+        public MenuButton(SpriteFont font, string buttonText, Vector2 textPos, Action onClick)
         {
             this.font = font;
             this.buttonText = buttonText;
             this.textPos = textPos;
+            OnClick = onClick;
 
             Vector2 textSize = font.MeasureString(buttonText);
             //Set origin to middle of string
@@ -37,11 +40,11 @@ namespace SuperMarioH3.Menu
                 (int)textSize.Y
             );
         }
-        public void Update(MouseState mouse)
+        public void TriggerClick()
         {
-            IsHovering = buttonBox.Contains(mouse.Position);
-            IsClicked = IsHovering && mouse.LeftButton == ButtonState.Pressed;
+            OnClick?.Invoke();
         }
+
         public void Draw(SpriteBatch spriteBatch)
         {
             Color color = IsHovering ? Color.White : Color.GhostWhite;
