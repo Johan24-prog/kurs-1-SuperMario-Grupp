@@ -19,7 +19,7 @@
 - **Mynt** – Ger poäng när Mario plockar upp dem.
 - **Liv** – Antalet chanser Mario har. När liven tar slut är spelet över.
 
-![](OOAD/usecaseDiagram.drawio.png)
+![Use case diagram](usecaseDiagram.drawio.png)
 
 ## Design
 Klassdiagram finns [här](https://github.com/EduEdugrade/net25-kurs-1-grupparbete-h3/blob/main/OOAD/Klassdiagram.drawio.png)
