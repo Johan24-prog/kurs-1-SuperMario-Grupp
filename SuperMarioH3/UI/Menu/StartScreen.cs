@@ -63,14 +63,14 @@ namespace SuperMarioH3.UI.Menu
 
         public void Update(GameTime gameTime)
         {
+            UserInput();
             for (int i = 0; i < buttons.Count; i++)
             {
-                UserInput(i);
-
+                MouseInput(i);
                 if (i == selectedIndex)
                 {
                     buttons[i].IsHovering = true;
-                    if (buttons[i].IsClicked)
+                    if (buttons[i].IsClicked || InputClicked())
                     {
                         buttons[i].TriggerClick();
                         buttons[i].IsClicked = false;
@@ -107,12 +107,10 @@ namespace SuperMarioH3.UI.Menu
             }
             spriteBatch.End();
         }
-        private void UserInput(int i)
+        private void UserInput()
         {
             currentGamePad = GamePad.GetState(PlayerIndex.One);
             currentKey = Keyboard.GetState();
-
-            MouseInput(i);
 
             if (InputUp())
             {
@@ -122,9 +120,6 @@ namespace SuperMarioH3.UI.Menu
             {
                 MoveSelection(1);
             }
-            if (currentKey.IsKeyDown(Keys.Enter) ||
-                currentGamePad.IsButtonDown(Buttons.A))
-                buttons[i].IsClicked = true;
 
             previousGamePad = currentGamePad;
             previousKey = currentKey;
@@ -145,6 +140,10 @@ namespace SuperMarioH3.UI.Menu
             if (buttons[index].IsHovering && mouse.LeftButton == ButtonState.Pressed)
                 buttons[index].IsClicked = true;
         }
+
+        private bool InputClicked() =>
+            currentKey.IsKeyDown(Keys.Enter) ||
+            currentGamePad.IsButtonDown(Buttons.A);
 
         private bool InputUp() =>
             currentKey.IsKeyDown(Keys.W) && !previousKey.IsKeyDown(Keys.W) ||
