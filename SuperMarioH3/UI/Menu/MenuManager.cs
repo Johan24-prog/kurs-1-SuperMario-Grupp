@@ -18,6 +18,7 @@ namespace SuperMarioH3.UI.Menu
         public void ShowMenu(string name)
         {
             activeMenu = menus[name]();
+            activeMenu.ResetInput();
         }
 
         public void Update(GameTime gameTime)

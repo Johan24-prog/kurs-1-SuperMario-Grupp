@@ -47,6 +47,9 @@ namespace SuperMarioH3.UI.Bas
                     buttons[i].IsHovering = false;
                 }
             }
+
+            previousGamePad = currentGamePad;
+            previousKey = currentKey;
         }
         public virtual void Draw(GameTime gameTime)
         {
@@ -86,9 +89,6 @@ namespace SuperMarioH3.UI.Bas
             {
                 MoveSelection(1);
             }
-
-            previousGamePad = currentGamePad;
-            previousKey = currentKey;
         }
 
         private void MoveSelection(int step)
@@ -108,8 +108,8 @@ namespace SuperMarioH3.UI.Bas
         }
 
         private bool InputClicked() =>
-            currentKey.IsKeyDown(Keys.Enter) ||
-            currentGamePad.IsButtonDown(Buttons.A);
+            currentKey.IsKeyDown(Keys.Enter) && !previousKey.IsKeyDown(Keys.Enter) ||
+            currentGamePad.IsButtonDown(Buttons.A) && !previousGamePad.IsButtonDown(Buttons.A);
 
         private bool InputUp() =>
             currentKey.IsKeyDown(Keys.W) && !previousKey.IsKeyDown(Keys.W) ||
@@ -121,7 +121,7 @@ namespace SuperMarioH3.UI.Bas
             currentKey.IsKeyDown(Keys.Down) && !previousKey.IsKeyDown(Keys.Down) ||
             currentGamePad.IsButtonDown(Buttons.DPadDown) && !previousGamePad.IsButtonDown(Buttons.DPadDown);
 
-        private void ResetInput()
+        public void ResetInput()
         {
             currentGamePad = GamePad.GetState(PlayerIndex.One);
             previousGamePad = currentGamePad;
