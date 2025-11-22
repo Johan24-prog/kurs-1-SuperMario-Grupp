@@ -4,7 +4,7 @@ using SuperMarioH3.UI.Bas;
 
 namespace SuperMarioH3.UI.Menu
 {
-    public class StartScreen : MenuScreen, IMenu
+    public class StartScreen : MenuScreen
     {
         public StartScreen(Game1 game, MenuManager menuManager, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
         {

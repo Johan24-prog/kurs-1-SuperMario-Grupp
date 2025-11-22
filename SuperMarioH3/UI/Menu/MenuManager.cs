@@ -7,10 +7,10 @@ namespace SuperMarioH3.UI.Menu
 {
     public class MenuManager
     {
-        private Dictionary<string, Func<IMenu>> menus = new();
-        IMenu activeMenu;
+        private Dictionary<string, Func<MenuScreen>> menus = new();
+        MenuScreen activeMenu;
 
-        public void RegisterMenu(string name, Func<IMenu> create)
+        public void RegisterMenu(string name, Func<MenuScreen> create)
         {
             menus[name] = create;
         }
