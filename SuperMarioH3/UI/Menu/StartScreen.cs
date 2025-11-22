@@ -2,34 +2,26 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SuperMarioH3.UI.Bas;
 
 namespace SuperMarioH3.UI.Menu
 {
-    public class StartScreen
+    public class StartScreen : MenuScreen, IMenu
     {
-        private List<MenuButton> buttons = new();
-
-        private Game1 game;
-        private SpriteBatch spriteBatch;
-        private Texture2D smallIcon;
-
-        Vector2 iconOrigin;
-
         // Keyboard states for input handling
         private KeyboardState previousKey;
         private KeyboardState currentKey;
 
         //Input handling for gamepad
         private GamePadState currentGamePad;
-        private GamePadState previousGamePad;
+        private GamePadState previousGamePad;        
 
-        int selectedIndex = 0;
-
-        public StartScreen(Game1 game, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
+        public StartScreen(Game1 game, MenuManager menuManager, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
         {
             this.game = game;
             this.spriteBatch = spriteBatch;
             this.smallIcon = smallIcon;
+            this.menuManager = menuManager;
 
             //center origin of icon
             iconOrigin = new Vector2(smallIcon.Width * 0.5f, smallIcon.Height * 0.5f);
@@ -51,7 +43,7 @@ namespace SuperMarioH3.UI.Menu
             topPosition.Y += spacing;
             buttons.Add(new MenuButton(font, "Options", topPosition, () =>
             {
-                game.Exit();
+                menuManager.ShowMenu("Options");
             }));
 
             topPosition.Y += spacing;
