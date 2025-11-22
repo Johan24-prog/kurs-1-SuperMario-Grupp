@@ -79,7 +79,7 @@ namespace SuperMarioH3
             new StartScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
 
             menuManager.RegisterMenu("Options", () =>
-            new OptionsScreen(this, font, _spriteBatch, mushroomTexture));
+            new OptionsScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
 
             menuManager.ShowMenu("Start");
         }
@@ -212,6 +212,11 @@ namespace SuperMarioH3
             base.Draw(gameTime);
         }
         public void StartGame() => State = GameState.Playing;
+        public void ToggleFullScreen(bool fullScreen)
+        {
+            _graphics.IsFullScreen = fullScreen;
+            _graphics.ApplyChanges();
+        }
     }
 }
 // TODO: Add more game features like enemies, power-ups, levels, etc.
