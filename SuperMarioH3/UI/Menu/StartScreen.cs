@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SuperMarioH3.UI.Menu
 {
-    public class MenuScreen
+    public class StartScreen
     {
         private List<MenuButton> buttons = new();
 
@@ -25,7 +25,7 @@ namespace SuperMarioH3.UI.Menu
 
         int selectedIndex = 0;
 
-        public MenuScreen(Game1 game, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
+        public StartScreen(Game1 game, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
         {
             this.game = game;
             this.spriteBatch = spriteBatch;

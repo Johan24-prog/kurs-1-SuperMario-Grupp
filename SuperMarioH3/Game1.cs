@@ -17,7 +17,7 @@ namespace SuperMarioH3
         SpriteFont font;
 
         //Menu
-        MenuScreen startScreen;
+        StartScreen startScreen;
 
         // Fields
         private GraphicsDeviceManager _graphics;
@@ -72,7 +72,7 @@ namespace SuperMarioH3
             // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
 
-            startScreen = new MenuScreen(this, font, _spriteBatch, mushroomTexture);
+            startScreen = new StartScreen(this, font, _spriteBatch, mushroomTexture);
         }
 
         // Load game content
