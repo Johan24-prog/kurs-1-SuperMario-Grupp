@@ -120,6 +120,15 @@ namespace SuperMarioH3.UI.Bas
             currentKey.IsKeyDown(Keys.S) && !previousKey.IsKeyDown(Keys.S) ||
             currentKey.IsKeyDown(Keys.Down) && !previousKey.IsKeyDown(Keys.Down) ||
             currentGamePad.IsButtonDown(Buttons.DPadDown) && !previousGamePad.IsButtonDown(Buttons.DPadDown);
+
+        private void ResetInput()
+        {
+            currentGamePad = GamePad.GetState(PlayerIndex.One);
+            previousGamePad = currentGamePad;
+
+            currentKey = Keyboard.GetState();
+            previousKey = currentKey;
+        }
     }
 }
 
