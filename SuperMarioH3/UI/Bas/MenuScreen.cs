@@ -27,6 +27,10 @@ namespace SuperMarioH3.UI.Bas
         private GamePadState currentGamePad;
         private GamePadState previousGamePad;
 
+        //Mouse input
+        private MouseState currentMouse;
+        private MouseState previousMouse;
+
         public virtual void Update(GameTime gameTime)
         {
             UserInput();
@@ -50,6 +54,7 @@ namespace SuperMarioH3.UI.Bas
 
             previousGamePad = currentGamePad;
             previousKey = currentKey;
+            previousMouse = currentMouse;
         }
         public virtual void Draw(GameTime gameTime)
         {
@@ -98,13 +103,17 @@ namespace SuperMarioH3.UI.Bas
 
         private void MouseInput(int index)
         {
-            var mouse = Mouse.GetState();
+            currentMouse = Mouse.GetState();
 
-            if (buttons[index].Bounds.Contains(mouse.Position))
+            if (buttons[index].Bounds.Contains(currentMouse.Position))
                 selectedIndex = index;
 
-            if (buttons[index].IsHovering && mouse.LeftButton == ButtonState.Pressed)
+            if (buttons[index].IsHovering &&
+                currentMouse.LeftButton == ButtonState.Pressed &&
+                previousMouse.LeftButton == ButtonState.Released)
+            {
                 buttons[index].IsClicked = true;
+            }
         }
 
         private bool InputClicked() =>
@@ -128,6 +137,9 @@ namespace SuperMarioH3.UI.Bas
 
             currentKey = Keyboard.GetState();
             previousKey = currentKey;
+
+            currentMouse = Mouse.GetState();
+            previousMouse = currentMouse;
         }
     }
 }
