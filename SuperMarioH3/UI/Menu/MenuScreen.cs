@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace SuperMarioH3.Menu
+namespace SuperMarioH3.UI.Menu
 {
     public class MenuScreen
     {

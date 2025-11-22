@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SuperMarioH3.Menu;
 using SuperMarioH3.MoveableObjects;
+using SuperMarioH3.UI.Menu;
 
 namespace SuperMarioH3
 {
