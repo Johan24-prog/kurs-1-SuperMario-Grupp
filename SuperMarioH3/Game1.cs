@@ -17,7 +17,7 @@ namespace SuperMarioH3
         SpriteFont font;
 
         //Menu
-        StartScreen startScreen;
+        MenuManager menuManager;
 
         // Fields
         private GraphicsDeviceManager _graphics;
@@ -63,6 +63,8 @@ namespace SuperMarioH3
             //Ändra denna till GameState.Playing för att skippa menyn
             State = GameState.Menu;
 
+            menuManager = new MenuManager();
+
             groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
             moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
 
@@ -72,7 +74,14 @@ namespace SuperMarioH3
             // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
 
-            startScreen = new StartScreen(this, font, _spriteBatch, mushroomTexture);
+            //Skapar olika menyer
+            menuManager.RegisterMenu("Start", () =>
+            new StartScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
+
+            menuManager.RegisterMenu("Options", () =>
+            new OptionsScreen(this, font, _spriteBatch, mushroomTexture));
+
+            menuManager.ShowMenu("Start");
         }
 
         // Load game content
@@ -141,7 +150,7 @@ namespace SuperMarioH3
 
             if (State == GameState.Menu)
             {
-                startScreen.Update(gameTime);
+                menuManager.Update(gameTime);
             }
             else
             {
@@ -176,7 +185,7 @@ namespace SuperMarioH3
             GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
 
             if (State == GameState.Menu)
-                startScreen.Draw(gameTime);
+                menuManager.Draw(gameTime);
             else
             {
                 _spriteBatch.Begin();
