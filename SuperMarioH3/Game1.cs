@@ -30,6 +30,8 @@ namespace SuperMarioH3
         private List<Platform> platforms; // List of platforms
         private Camera2D camera; // Camera instance
 
+        private int coinCount = 0; // Collected coins count
+
         // Textures
         private Texture2D coinTexture; // Coin texture
         private Texture2D groundTexture; // Ground texture
@@ -159,10 +161,20 @@ namespace SuperMarioH3
 
                 // Update coins (hitbox comes from Player class)
                 foreach (var coin in coins)
+                {
+                    bool wasCollected = coin.Collected; // Store previous collected state
+
                     coin.Update(player.GetHitbox());
 
-                // Update camera to follow player
-                camera.Follow(player.Motion.Position);
+                    // If coin was not collected before but is now, increment coin count
+                    if (!wasCollected && coin.Collected)
+                    {
+                        coinCount++;
+                    }
+                }
+
+                    // Update camera to follow player
+                    camera.Follow(player.Motion.Position);
 
 
 
@@ -197,6 +209,16 @@ namespace SuperMarioH3
                 foreach (var coin in coins)
                     if (!coin.Collected)
                         coin.Draw(_spriteBatch);
+                _spriteBatch.End();
+
+                // Draw coin count
+                _spriteBatch.Begin();
+                _spriteBatch.DrawString(
+                    font,
+                    "Coins: " + coinCount,
+                    new Vector2(20, 20),
+                    Color.Yellow);
+
                 _spriteBatch.End();
             }
 
