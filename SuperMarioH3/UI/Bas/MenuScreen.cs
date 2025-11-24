@@ -2,18 +2,22 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SuperMarioH3.UI.Menu;
 
-namespace SuperMarioH3.Menu
+namespace SuperMarioH3.UI.Bas
 {
-    public class MenuScreen
+    public abstract class MenuScreen
     {
-        private List<MenuButton> buttons = new();
+        protected List<MenuButton> buttons = new();
 
-        private Game1 game;
-        private SpriteBatch spriteBatch;
-        private Texture2D smallIcon;
+        protected Game1 game;
+        protected SpriteBatch spriteBatch;
+        protected Texture2D smallIcon;
+        protected MenuManager menuManager;
 
-        Vector2 iconOrigin;
+        protected Vector2 iconOrigin;
+
+        protected int selectedIndex = 0;
 
         // Keyboard states for input handling
         private KeyboardState previousKey;
@@ -23,54 +27,20 @@ namespace SuperMarioH3.Menu
         private GamePadState currentGamePad;
         private GamePadState previousGamePad;
 
-        int selectedIndex = 0;
+        //Mouse input
+        private MouseState currentMouse;
+        private MouseState previousMouse;
 
-        public MenuScreen(Game1 game, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
+        public virtual void Update(GameTime gameTime)
         {
-            this.game = game;
-            this.spriteBatch = spriteBatch;
-            this.smallIcon = smallIcon;
-
-            //center origin of icon
-            iconOrigin = new Vector2(smallIcon.Width * 0.5f, smallIcon.Height * 0.5f);
-
-            //offset space between buttons
-            var spacing = font.LineSpacing * 1.7f;
-
-            //Create position of first button
-            Vector2 topPosition = new Vector2(
-               game.GraphicsDevice.PresentationParameters.BackBufferWidth,
-               game.GraphicsDevice.PresentationParameters.BackBufferHeight * 0.7f) * 0.5f;
-
-            //Create buttons
-            buttons.Add(new MenuButton(font, "Play Demo", topPosition, () =>
-            {
-                game.StartGame();
-            }));
-
-            topPosition.Y += spacing;
-            buttons.Add(new MenuButton(font, "Options", topPosition, () =>
-            {
-                game.Exit();
-            }));
-
-            topPosition.Y += spacing;
-            buttons.Add(new MenuButton(font, "Exit", topPosition, () =>
-            {
-                game.Exit();
-            }));
-        }
-
-        public void Update(GameTime gameTime)
-        {
+            UserInput();
             for (int i = 0; i < buttons.Count; i++)
             {
-                UserInput(i);
-
+                MouseInput(i);
                 if (i == selectedIndex)
                 {
                     buttons[i].IsHovering = true;
-                    if (buttons[i].IsClicked)
+                    if (buttons[i].IsClicked || InputClicked())
                     {
                         buttons[i].TriggerClick();
                         buttons[i].IsClicked = false;
@@ -81,9 +51,12 @@ namespace SuperMarioH3.Menu
                     buttons[i].IsHovering = false;
                 }
             }
-        }
 
-        public void Draw(GameTime gameTime)
+            previousGamePad = currentGamePad;
+            previousKey = currentKey;
+            previousMouse = currentMouse;
+        }
+        public virtual void Draw(GameTime gameTime)
         {
             spriteBatch.Begin();
             foreach (var button in buttons)
@@ -107,12 +80,11 @@ namespace SuperMarioH3.Menu
             }
             spriteBatch.End();
         }
-        private void UserInput(int i)
+
+        private void UserInput()
         {
             currentGamePad = GamePad.GetState(PlayerIndex.One);
             currentKey = Keyboard.GetState();
-
-            MouseInput(i);
 
             if (InputUp())
             {
@@ -122,12 +94,6 @@ namespace SuperMarioH3.Menu
             {
                 MoveSelection(1);
             }
-            if (currentKey.IsKeyDown(Keys.Enter) ||
-                currentGamePad.IsButtonDown(Buttons.A))
-                buttons[i].IsClicked = true;
-
-            previousGamePad = currentGamePad;
-            previousKey = currentKey;
         }
 
         private void MoveSelection(int step)
@@ -137,14 +103,22 @@ namespace SuperMarioH3.Menu
 
         private void MouseInput(int index)
         {
-            var mouse = Mouse.GetState();
+            currentMouse = Mouse.GetState();
 
-            if (buttons[index].Bounds.Contains(mouse.Position))
+            if (buttons[index].Bounds.Contains(currentMouse.Position))
                 selectedIndex = index;
 
-            if (buttons[index].IsHovering && mouse.LeftButton == ButtonState.Pressed)
+            if (buttons[index].IsHovering &&
+                currentMouse.LeftButton == ButtonState.Pressed &&
+                previousMouse.LeftButton == ButtonState.Released)
+            {
                 buttons[index].IsClicked = true;
+            }
         }
+
+        private bool InputClicked() =>
+            currentKey.IsKeyDown(Keys.Enter) && !previousKey.IsKeyDown(Keys.Enter) ||
+            currentGamePad.IsButtonDown(Buttons.A) && !previousGamePad.IsButtonDown(Buttons.A);
 
         private bool InputUp() =>
             currentKey.IsKeyDown(Keys.W) && !previousKey.IsKeyDown(Keys.W) ||
@@ -155,5 +129,18 @@ namespace SuperMarioH3.Menu
             currentKey.IsKeyDown(Keys.S) && !previousKey.IsKeyDown(Keys.S) ||
             currentKey.IsKeyDown(Keys.Down) && !previousKey.IsKeyDown(Keys.Down) ||
             currentGamePad.IsButtonDown(Buttons.DPadDown) && !previousGamePad.IsButtonDown(Buttons.DPadDown);
+
+        public void ResetInput()
+        {
+            currentGamePad = GamePad.GetState(PlayerIndex.One);
+            previousGamePad = currentGamePad;
+
+            currentKey = Keyboard.GetState();
+            previousKey = currentKey;
+
+            currentMouse = Mouse.GetState();
+            previousMouse = currentMouse;
+        }
     }
 }
+

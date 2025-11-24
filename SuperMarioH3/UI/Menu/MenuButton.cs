@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace SuperMarioH3.Menu
+namespace SuperMarioH3.UI.Menu
 {
     public class MenuButton
     {

@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SuperMarioH3.Menu;
 using SuperMarioH3.MoveableObjects;
+using SuperMarioH3.UI.Menu;
 
 namespace SuperMarioH3
 {
@@ -17,7 +17,7 @@ namespace SuperMarioH3
         SpriteFont font;
 
         //Menu
-        MenuScreen startScreen;
+        MenuManager menuManager;
 
         // Fields
         private GraphicsDeviceManager _graphics;
@@ -65,6 +65,8 @@ namespace SuperMarioH3
             //Ändra denna till GameState.Playing för att skippa menyn
             State = GameState.Menu;
 
+            menuManager = new MenuManager();
+
             groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
             moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
 
@@ -74,7 +76,14 @@ namespace SuperMarioH3
             // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
 
-            startScreen = new MenuScreen(this, font, _spriteBatch, mushroomTexture);
+            //Skapar olika menyer
+            menuManager.RegisterMenu("Start", () =>
+            new StartScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
+
+            menuManager.RegisterMenu("Options", () =>
+            new OptionsScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
+
+            menuManager.ShowMenu("Start");
         }
 
         // Load game content
@@ -143,7 +152,7 @@ namespace SuperMarioH3
 
             if (State == GameState.Menu)
             {
-                startScreen.Update(gameTime);
+                menuManager.Update(gameTime);
             }
             else
             {
@@ -188,7 +197,7 @@ namespace SuperMarioH3
             GraphicsDevice.Clear(Color.CornflowerBlue); // Clear screen with a color
 
             if (State == GameState.Menu)
-                startScreen.Draw(gameTime);
+                menuManager.Draw(gameTime);
             else
             {
                 _spriteBatch.Begin();
@@ -225,6 +234,11 @@ namespace SuperMarioH3
             base.Draw(gameTime);
         }
         public void StartGame() => State = GameState.Playing;
+        public void ToggleFullScreen(bool fullScreen)
+        {
+            _graphics.IsFullScreen = fullScreen;
+            _graphics.ApplyChanges();
+        }
     }
 }
 // TODO: Add more game features like enemies, power-ups, levels, etc.

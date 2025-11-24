@@ -1,0 +1,56 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using SuperMarioH3.UI.Bas;
+
+namespace SuperMarioH3.UI.Menu
+{
+    public class OptionsScreen : MenuScreen
+    {
+        public OptionsScreen(Game1 game, MenuManager menuManager, SpriteFont font, SpriteBatch spriteBatch, Texture2D smallIcon)
+        {
+            this.game = game;
+            this.spriteBatch = spriteBatch;
+            this.smallIcon = smallIcon;
+            this.menuManager = menuManager;
+
+            //center origin of icon
+            iconOrigin = new Vector2(smallIcon.Width * 0.5f, smallIcon.Height * 0.5f);
+
+            //offset space between buttons
+            var spacing = font.LineSpacing * 1.7f;
+
+            //Create position of first button
+            Vector2 topPosition = new Vector2(
+               game.GraphicsDevice.PresentationParameters.BackBufferWidth,
+               game.GraphicsDevice.PresentationParameters.BackBufferHeight * 0.7f) * 0.5f;
+
+            //Create buttons
+            buttons.Add(new MenuButton(font, "Fullscreen", topPosition, () =>
+            {
+                game.ToggleFullScreen(true);
+            }));
+
+            topPosition.Y += spacing;
+            buttons.Add(new MenuButton(font, "Windowed", topPosition, () =>
+            {
+                game.ToggleFullScreen(false);
+            }));
+
+            topPosition.Y += spacing;
+            buttons.Add(new MenuButton(font, "Back", topPosition, () =>
+            {
+                menuManager.ShowMenu("Start");
+            }));
+        }
+
+        public override void Update(GameTime gameTime)
+        {
+            base.Update(gameTime);
+        }
+
+        public override void Draw(GameTime gameTime)
+        {
+            base.Draw(gameTime);
+        }
+    }
+}

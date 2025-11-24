@@ -26,8 +26,8 @@ namespace SuperMarioH3.MoveableObjects
         private GamePadState previousGamePad;
 
         // Movement constants
-        private const float Gravity = 900f;
-        private const float JumpStrength = -700f;
+        private const float Gravity = 1700f;
+        private const float JumpStrength = -750f;
         private const float WalkSpeed = 300f;
         private const float RunSpeed =450f;
         private const float Accel = 1500f;
