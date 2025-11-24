@@ -218,13 +218,23 @@ namespace SuperMarioH3
                 foreach (var coin in coins)
                     if (!coin.Collected)
                         coin.Draw(_spriteBatch);
-                _spriteBatch.End();
 
-                // Draw coin count
-                _spriteBatch.Begin();
+                // Draw coin icon
+                _spriteBatch.Draw(
+                    coinTexture,
+                    new Vector2(10, 50),
+                    null,
+                    Color.White,
+                    0f,
+                    Vector2.Zero,
+                    0.5f,
+                    SpriteEffects.None,
+                    0f);
+
+                // Draw coin count               
                 _spriteBatch.DrawString(
                     font,
-                    "Coins: " + coinCount,
+                    "x " + coinCount,
                     new Vector2(20, 20),
                     Color.Yellow);
 
