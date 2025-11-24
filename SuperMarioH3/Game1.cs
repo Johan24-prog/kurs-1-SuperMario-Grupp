@@ -219,24 +219,35 @@ namespace SuperMarioH3
                     if (!coin.Collected)
                         coin.Draw(_spriteBatch);
 
+                Vector2 coinPos = new Vector2(10, 10);
+
                 // Draw coin icon
                 _spriteBatch.Draw(
                     coinTexture,
-                    new Vector2(10, 50),
+                    coinPos,
                     null,
                     Color.White,
                     0f,
                     Vector2.Zero,
-                    0.5f,
+                    1f,
                     SpriteEffects.None,
                     0f);
+
+                // Icon width for positioning text
+                float iconWidthScaled = coinTexture.Width * 1f;
+                float spacing = 10f;  // Space between icon and text
 
                 // Draw coin count               
                 _spriteBatch.DrawString(
                     font,
                     "x " + coinCount,
-                    new Vector2(20, 20),
-                    Color.Yellow);
+                    new Vector2(coinPos.X + iconWidthScaled + spacing, coinPos.Y + 5),
+                    Color.Yellow,
+                    0f,
+                    Vector2.Zero,
+                    0.6f,
+                    SpriteEffects.None,
+                    0f);
 
                 _spriteBatch.End();
             }
