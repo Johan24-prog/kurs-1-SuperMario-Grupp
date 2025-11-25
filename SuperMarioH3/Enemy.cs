@@ -15,6 +15,7 @@ namespace SuperMarioH3
         private const float Gravity = 900f;
         private const float MoveSpeed = 80f;
         private const float MaxFallSpeed = 1200f;
+        private float deathTimer = 0f;
 
         private bool isOnGround;
 
@@ -30,10 +31,13 @@ namespace SuperMarioH3
 
         public void Update(GameTime gameTime, List<Platform> platforms, Rectangle groundRect, Rectangle worldBounds)
         {
-            if (IsDead)
-                return;
-
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (IsDead)
+            {
+                deathTimer += dt;
+                return;
+            }
 
             // Horizontal movement
             velocity.X = MoveSpeed * direction;
@@ -107,6 +111,7 @@ namespace SuperMarioH3
             if (!IsDead)
                 spriteBatch.Draw(texture, position, Color.White);
         }
+        public bool ReadyToRemove => IsDead && deathTimer > 0.4f;
     }
 }
 // TODO: Add aggressive behaviors for enemies, such as chasing the player.
