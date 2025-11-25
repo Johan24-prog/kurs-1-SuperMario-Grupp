@@ -212,6 +212,12 @@ namespace SuperMarioH3
                         // player.Die();
                     }
                 }
+                foreach (var enemy in enemies)
+                {
+                    enemy.UpdateAI(player.Motion.Position);
+                    enemy.Update(gameTime, platforms, groundRect, worldBounds);
+                }
+
                 // Remove enemies that are marked for removal
                 enemies.RemoveAll(e => e.ReadyToRemove);
 
