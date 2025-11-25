@@ -182,11 +182,41 @@ namespace SuperMarioH3
                     }
                 }
 
-                    // Update camera to follow player
-                    camera.Follow(player.Motion.Position);
+                // Handle collisions between player and enemies
+                foreach (var enemy in enemies)
+                {
+                    if (enemy.IsDead)
+                        continue;
 
+                    Rectangle playerBox = player.GetHitbox().Bounds;
+                    Rectangle enemyBox = enemy.Hitbox;
 
+                    // --- STOMPING (hoppa på fienden) ---
+                    bool stomp =
+                        playerBox.Bottom <= enemyBox.Top + 10 &&
+                        player.Motion.Velocity.Y > 0 &&
+                        playerBox.Intersects(enemyBox);
 
+                    if (stomp)
+                    {
+                        enemy.Kill();
+                        player.Motion.Velocity = new Vector2(player.Motion.Velocity.X, -450f); // studsa upp
+                        continue;
+                    }
+
+                    // --- SIDOKOLLISION (spelaren tar skada) ---
+                    if (playerBox.Intersects(enemyBox))
+                    {
+                        // TODO: implementera skada / livssystem
+                        // Exempel:
+                        // player.Die();
+                    }
+                }
+                // Remove enemies that are marked for removal
+                enemies.RemoveAll(e => e.ReadyToRemove);
+
+                // Update camera to follow player
+                camera.Follow(player.Motion.Position);
                 base.Update(gameTime);
             }
         }
