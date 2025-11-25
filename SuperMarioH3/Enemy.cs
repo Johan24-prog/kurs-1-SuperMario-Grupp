@@ -18,6 +18,10 @@ namespace SuperMarioH3
         private float deathTimer = 0f;
 
         private bool isOnGround;
+        private bool isChasing = false;
+        private float chaseRange = 300f;     // How close the player needs to be to start chasing
+        private float stopChaseRange = 450f; // How far the player needs to be to stop chasing
+
 
         public bool IsDead { get; private set; } = false;
         public Rectangle Hitbox => hitbox;
@@ -102,6 +106,34 @@ namespace SuperMarioH3
             hitbox.X = (int)position.X;
             hitbox.Y = (int)position.Y;
         }
+
+        public void UpdateAI(Vector2 playerPos)
+        {
+            if (IsDead)
+                return;
+
+            float distance = Vector2.Distance(playerPos, position);
+
+            // Start chasing if player is within range
+            if (!isChasing && distance < chaseRange)
+                isChasing = true;
+
+            // Stop chasing if player is far away
+            if (isChasing && distance > stopChaseRange)
+                isChasing = false;
+
+            if (isChasing)
+            {
+                // Follow the player
+                if (playerPos.X < position.X)
+                    direction = -1;
+                else if (playerPos.X > position.X)
+                    direction = 1;
+            }
+
+            // If not chasing, continue patrolling
+        }
+
 
 
         public void Kill() => IsDead = true;
