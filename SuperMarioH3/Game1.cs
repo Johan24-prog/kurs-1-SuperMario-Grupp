@@ -168,6 +168,8 @@ namespace SuperMarioH3
                 // Let the player class handle collisions with platforms
                 player.HandlePlatforms(platforms, dt);
 
+                endDoor.Update(player.GetHitbox().Bounds);
+
                 // Update coins (hitbox comes from Player class)
                 foreach (var coin in coins)
                 {

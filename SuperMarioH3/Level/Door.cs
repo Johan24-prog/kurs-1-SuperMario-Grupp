@@ -7,7 +7,8 @@ namespace SuperMarioH3.Level
     {
         private Texture2D doorTexture;
         private Rectangle doorRect;
-        bool doorReached;
+
+        public bool DoorReached { get; private set; }
 
         public Door(Game1 game, Rectangle groundRect)
         {
@@ -15,12 +16,15 @@ namespace SuperMarioH3.Level
             doorTexture.SetData(new[] { Color.DarkRed });
 
             doorRect = new Rectangle(groundRect.Width - 100, groundRect.Y - groundRect.Height + 30, 50, 100);
-            doorReached = false;
+            DoorReached = false;
         }
 
-        public void Update()
+        public void Update(Rectangle playerRect)
         {
-
+            if (doorRect.Intersects(playerRect))
+            {
+                DoorReached = true;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch)
