@@ -59,11 +59,6 @@ namespace SuperMarioH3
             _graphics.ApplyChanges();
         }
 
-        // Movement constants (example values)
-        private const float MoveSpeed = 150f;
-        private const float jumpStrength = -400f;
-        private const float Gravity = 900f;
-
         protected override void Initialize()
         {
             //Ändra denna till GameState.Playing för att skippa menyn
