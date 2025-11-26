@@ -41,6 +41,10 @@ namespace SuperMarioH3
         private List<Enemy> enemies;
         private Texture2D goombaTexture;
 
+        //End of level door
+        private Texture2D doorTexture;
+        private Rectangle doorRect;
+
         // Constructor
         public Game1()
         {
@@ -68,6 +72,7 @@ namespace SuperMarioH3
             menuManager = new MenuManager();
 
             groundRect = new Rectangle(0, 950, 1920 * 2, 130); // Ground at the bottom of the screen
+            doorRect = new Rectangle(groundRect.Width - 100, groundRect.Y - groundRect.Height + 30, 50, 100);
             moveLimiter = new Move(groundRect.Width); // Screen width limiter
 
             camera = new Camera2D(GraphicsDevice.Viewport); // Initialize camera
@@ -101,6 +106,10 @@ namespace SuperMarioH3
 
             groundTexture = new Texture2D(GraphicsDevice, 1, 1); // Create ground texture
             groundTexture.SetData(new[] { Color.ForestGreen }); // Set ground color
+
+            //Door texture
+            doorTexture = new Texture2D(GraphicsDevice, 1, 1);
+            doorTexture.SetData(new[] { Color.DarkRed });
 
             // Initialize player
             player = new Player(playerTexture, new Vector2(100, 850), moveLimiter, groundRect, GraphicsDevice);
@@ -241,6 +250,7 @@ namespace SuperMarioH3
                 //_spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 
                 _spriteBatch.Draw(groundTexture, groundRect, Color.White); // Draw ground
+                _spriteBatch.Draw(doorTexture, doorRect, Color.White);
                 player.Draw(_spriteBatch);
 
                 foreach (var plat in platforms)
