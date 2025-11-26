@@ -73,13 +73,22 @@ namespace SuperMarioH3
             // Example: camera.SetBounds(new Rectangle(0, 0, 4000, 1080)); // Uncomment to set world bounds
             base.Initialize();
 
-            endDoor = new Door(this, groundRect);
+            //Skapar dörren som kommer anropa "Win" menyn om spelaren går in i den.
+            endDoor = new Door(this, groundRect, () =>
+            {
+                menuManager.ShowMenu("Win");
+                State = GameState.Menu;
+            });
+
             //Skapar olika menyer
             menuManager.RegisterMenu("Start", () =>
             new StartScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
 
             menuManager.RegisterMenu("Options", () =>
             new OptionsScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
+
+            menuManager.RegisterMenu("Win", () =>
+            new WinScreen(this, menuManager, font, _spriteBatch, mushroomTexture));
 
             menuManager.ShowMenu("Start");
         }
