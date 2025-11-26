@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace SuperMarioH3.Level
@@ -8,22 +9,22 @@ namespace SuperMarioH3.Level
         private Texture2D doorTexture;
         private Rectangle doorRect;
 
-        public bool DoorReached { get; private set; }
-
-        public Door(Game1 game, Rectangle groundRect)
+        private readonly Action onDoorReached;
+        public Door(Game1 game, Rectangle groundRect, Action onDoorReached)
         {
+            this.onDoorReached = onDoorReached;
+
             doorTexture = new Texture2D(game.GraphicsDevice, 1, 1);
             doorTexture.SetData(new[] { Color.DarkRed });
 
             doorRect = new Rectangle(groundRect.Width - 100, groundRect.Y - groundRect.Height + 30, 50, 100);
-            DoorReached = false;
         }
 
         public void Update(Rectangle playerRect)
         {
             if (doorRect.Intersects(playerRect))
             {
-                DoorReached = true;
+                onDoorReached?.Invoke();
             }
         }
 
