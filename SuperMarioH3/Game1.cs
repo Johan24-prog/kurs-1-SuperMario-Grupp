@@ -67,7 +67,7 @@ namespace SuperMarioH3
 
             menuManager = new MenuManager();
 
-            groundRect = new Rectangle(0, 950, 1920 * 3, 130); // Ground at the bottom of the screen
+            groundRect = new Rectangle(0, 950, 1920 * 2, 130); // Ground at the bottom of the screen
             moveLimiter = new Move(groundRect.Width); // Screen width limiter
 
             camera = new Camera2D(GraphicsDevice.Viewport); // Initialize camera
@@ -236,7 +236,7 @@ namespace SuperMarioH3
                 menuManager.Draw(gameTime);
             else
             {
-                _spriteBatch.Begin();
+                _spriteBatch.Begin(transformMatrix: camera.Transform);
                 // Draw ground using the single reused texture
                 //_spriteBatch.Draw(groundTexture, groundRect, Color.White);          
 

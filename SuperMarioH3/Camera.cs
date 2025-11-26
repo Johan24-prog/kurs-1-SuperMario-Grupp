@@ -51,6 +51,7 @@ namespace SuperMarioH3
             Transform = Matrix.CreateTranslation(new Vector3(-_position, 0f)) *
                         Matrix.CreateRotationZ(_rotation) *
                         Matrix.CreateScale(_zoom, _zoom, 1f);
+                        //Matrix.CreateTranslation(new Vector3(_viewport.Width * 0.5f, _viewport.Height * 0.5f, 0f));
         }
 
         // Zoom in or out
