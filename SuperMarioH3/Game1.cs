@@ -67,8 +67,8 @@ namespace SuperMarioH3
 
             menuManager = new MenuManager();
 
-            groundRect = new Rectangle(0, 950, 1920, 130); // Ground at the bottom of the screen
-            moveLimiter = new Move(_graphics.PreferredBackBufferWidth); // Screen width limiter
+            groundRect = new Rectangle(0, 950, 1920 * 3, 130); // Ground at the bottom of the screen
+            moveLimiter = new Move(groundRect.Width); // Screen width limiter
 
             camera = new Camera2D(GraphicsDevice.Viewport); // Initialize camera
 
