@@ -1,5 +1,5 @@
 # Super Mario H3
-// Lägg till kort beskrivning av spelet
+Det här 
 ## Installation
 För att kunna köra spelet så behöver projektets källkod laddas ner och byggas med en kodeditor, samt ha MonoGames ramverk installerat.
 Nedan följer en guide för hur man laddar ner spelets källkod och bygger projektet i Windows-miljö med Visual Studio 2026.  
@@ -26,4 +26,16 @@ För ett annat OS eller en annan kodeditor så hänvisar jag er till denna länk
     ![](images/play.png)
 
 ## Hur du spelar
-// Kort beskrivning av kontrollerna, hoppa springa etc på tangentbord och gamepad, vad målet är
+Spelet består av flera olika nivåer där spelaren ska ta sig till slutet av en nivå för att kunna ta sig vidare till nästa.   
+Under spelets gång så ska spelaren undvika eller slå ut fiender, samla mynt och powerups. En fiende slås ut genom att spelaren hoppar på den. Skulle spelaren förlora alla sina liv så börjar spelet om från början.
+### Demo
+Denna demo version har endast en nivå och ett fåtal fiender.
+### Kontroller  
+- **Speldosa**
+  - **Rörelse:** Styrkorset
+  - **Hoppa:** A-knappen
+  - **Öka hastighet**: X-knappen
+- **Tangentbord**
+  - **Rörelse:** WASD eller piltangenter
+  - **Hoppa:** `Space`
+  - **Öka hastighet:** `l-shift` / `B`
