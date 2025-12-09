@@ -1,5 +1,8 @@
 # Super Mario H3
-Det här projektet är grupp H3's försök till att återskapa det klassiska spelet Super Mario, utvecklad med hjälp av ramverket MonoGame. 
+Det här projektet är grupp H3's försök till att återskapa det klassiska spelet Super Mario, utvecklad med hjälp av ramverket MonoGame.  
+
+![](images/superh3.png)  
+*Super Mario!*
 
 ## Installation
 För att kunna köra spelet så behöver projektets källkod laddas ner och byggas med en kodeditor, samt ha MonoGames ramverk installerat.
