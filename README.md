@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# .net25-oop-group
-Grupparbete för första kursen
-=======
 # Super Mario H3
 Det här projektet är grupp H3's försök till att återskapa det klassiska spelet Super Mario, utvecklad med hjälp av ramverket MonoGame.  
 
@@ -49,4 +45,3 @@ Denna demo version har endast en nivå och ett fåtal fiender.
   - **Rörelse:** WASD eller piltangenter
   - **Hoppa:** `Space`
   - **Öka hastighet:** `l-shift` / `B`
->>>>>>> b9f3b7276c0a96465ab4cb02e07527227fb4d190
